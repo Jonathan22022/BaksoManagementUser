@@ -20,17 +20,20 @@ class FavouriteFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_favourite, container, false)
 
         val recycler = view.findViewById<RecyclerView>(R.id.recyclerFavourite)
+        val emptyLayout = view.findViewById<View>(R.id.layoutEmpty)
 
         recycler.layoutManager = LinearLayoutManager(requireContext())
 
-        val favouriteList = listOf(
-            Favourite("Bakso Keju",R.drawable.bakso),
-            Favourite("Bakso Beranak",R.drawable.bakso),
-            Favourite("Bakso Urat",R.drawable.bakso),
-            Favourite("Bakso Jumbo",R.drawable.bakso)
-        )
+        val favouriteList = listOf<Favourite>() // 🔥 kosongkan untuk test
 
-        recycler.adapter = FavouriteAdapter(favouriteList)
+        if (favouriteList.isEmpty()) {
+            recycler.visibility = View.GONE
+            emptyLayout.visibility = View.VISIBLE
+        } else {
+            recycler.visibility = View.VISIBLE
+            emptyLayout.visibility = View.GONE
+            recycler.adapter = FavouriteAdapter(favouriteList)
+        }
 
         return view
     }

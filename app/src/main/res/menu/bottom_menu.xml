@@ -9,10 +9,6 @@
         android:title="Menu"
         android:icon="@drawable/ic_menu"/>
     <item
-        android:id="@+id/menu_order"
-        android:title="Order"
-        android:icon="@drawable/ic_order"/>
-    <item
         android:id="@+id/menu_cart"
         android:title="Cart"
         android:icon="@drawable/ic_cart"/>

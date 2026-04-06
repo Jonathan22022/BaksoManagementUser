@@ -27,20 +27,32 @@ class HistoryFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_history, container, false)
 
         val recycler = view.findViewById<RecyclerView>(R.id.recyclerHistory)
-        val fabDelete = view.findViewById<FloatingActionButton>(R.id.fabDelete)
+        val emptyLayout = view.findViewById<View>(R.id.layoutEmptyHistory)
+        val btnAddOrder = view.findViewById<View>(R.id.btnAddOrder)
 
         recycler.layoutManager = LinearLayoutManager(requireContext())
 
-        historyList.addAll(
-            listOf(
-                History("Bakso Keju","Senin, 24 Januari 2025","Campuran Mie dan Bihun","Rp. 28.000",R.drawable.bakso,"Completed"),
-                History("Bakso Beranak","Senin, 24 Januari 2025","No addon","Rp. 20.000",R.drawable.bakso,"Completed"),
-                History("Bakso Keju","Senin, 24 Januari 2025","No addon","Rp. 28.000",R.drawable.bakso,"Cancelled")
-            )
-        )
+// 🔥 TEST KOSONGKAN
+// historyList.clear()
 
-        adapter = HistoryAdapter(historyList)
-        recycler.adapter = adapter
+        if (historyList.isEmpty()) {
+            recycler.visibility = View.GONE
+            emptyLayout.visibility = View.VISIBLE
+            fabDelete.visibility = View.GONE
+        } else {
+            recycler.visibility = View.VISIBLE
+            emptyLayout.visibility = View.GONE
+            fabDelete.visibility = View.VISIBLE
+            recycler.adapter = adapter
+        }
+
+// BUTTON TAMBAH PESANAN
+        btnAddOrder.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, MenuFragment())
+                .addToBackStack(null)
+                .commit()
+        }
 
         // FAB DELETE
         fabDelete.setOnClickListener {
