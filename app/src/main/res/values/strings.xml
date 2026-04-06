@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Baksoku</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_header_title">Navigation</string>
+    <string name="name">Name</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_account">Account</string>
+    <string name="menu_about_us">About Us</string>
+    <string name="menu_favourite">Favourite</string>
+    <string name="menu_history">History</string>
+    <string name="menu_setting">Setting</string>
+    <string name="menu_logout">Logout</string>
+</resources>
