@@ -33,4 +33,8 @@ class AuthRepository {
                 onResult(false, it.message)
             }
     }
+
+    fun logout() {
+        auth.signOut()
+    }
 }

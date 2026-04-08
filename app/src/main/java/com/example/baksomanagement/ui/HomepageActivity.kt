@@ -1,15 +1,19 @@
 package com.example.baksomanagement
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.example.baksomanagement.data.repository.AuthRepository
 import com.example.baksomanagement.ui.*
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 
 class HomepageActivity : AppCompatActivity() {
+
+    private val authRepository = AuthRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +37,6 @@ class HomepageActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.menu_home -> loadFragment(HomepageFragment())
                 R.id.menu_makanan -> loadFragment(MenuFragment())
-                R.id.menu_order -> loadFragment(OrderFragment())
                 R.id.menu_cart -> loadFragment(CartFragment())
                 R.id.menu_account -> loadFragment(AccountFragment())
             }
@@ -49,6 +52,13 @@ class HomepageActivity : AppCompatActivity() {
                 R.id.menu_favourite -> loadFragment(FavouriteFragment())
                 R.id.menu_about_us -> loadFragment(AboutUsFragment())
                 R.id.menu_setting -> loadFragment(SettingFragment())
+                R.id.menu_logout -> {
+                    authRepository.logout()
+                    val intent = Intent(this, MainActivity::class.java) // activity yg ada FirstPageFragment
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
+                }
             }
             drawerLayout.close()
             true
@@ -60,4 +70,5 @@ class HomepageActivity : AppCompatActivity() {
             .replace(R.id.home_fragment_container, fragment)
             .commit()
     }
+
 }
