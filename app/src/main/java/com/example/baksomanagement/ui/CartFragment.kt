@@ -5,7 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.baksomanagement.R
+import com.example.baksomanagement.data.model.Cart
+import androidx.navigation.fragment.findNavController
 
 class CartFragment : Fragment() {
 
@@ -38,11 +42,7 @@ class CartFragment : Fragment() {
 
         // BUTTON TAMBAHKAN PESANAN
         btnAddMenu.setOnClickListener {
-
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, MenuFragment())
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.action_cartFragment_to_menuFragment)
         }
 
         return view

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.baksomanagement.R
+import androidx.navigation.fragment.findNavController
 
 class PaymentMethodFragment : Fragment() {
 
@@ -46,11 +47,7 @@ class PaymentMethodFragment : Fragment() {
         val btnChoose = view.findViewById<View>(R.id.btnChoosePayment)
 
         btnChoose.setOnClickListener {
-
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, PaymentConfirmationFragment())
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.action_paymentMethodFragment_to_paymentConfirmationFragment)
         }
 
         return view

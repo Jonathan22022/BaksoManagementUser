@@ -19,9 +19,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "CLOUDINARY_CLOUD_NAME", "\"${CLOUDINARY_CLOUD_NAME}\""
-        buildConfigField "String", "CLOUDINARY_API_KEY", "\"${CLOUDINARY_API_KEY}\""
-        buildConfigField "String", "CLOUDINARY_API_SECRET", "\"${CLOUDINARY_API_SECRET}\""
+        buildConfigField("String", "CLOUDINARY_CLOUD_NAME", "\"${project.findProperty("CLOUDINARY_CLOUD_NAME")}\"")
+        buildConfigField("String", "CLOUDINARY_API_KEY", "\"${project.findProperty("CLOUDINARY_API_KEY")}\"")
+        buildConfigField("String", "CLOUDINARY_API_SECRET", "\"${project.findProperty("CLOUDINARY_API_SECRET")}\"")
     }
 
     buildTypes {
@@ -39,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -50,7 +51,6 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation("com.cloudinary:cloudinary-android:2.3.1")
     implementation("com.github.bumptech.glide:glide:4.16.0")
-    implementation("com.github.CanHub:Android-Image-Cropper:4.5.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

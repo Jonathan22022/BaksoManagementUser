@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.baksomanagement.R
+import androidx.navigation.fragment.findNavController
 
 class PaymentConfirmationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -14,11 +15,7 @@ class PaymentConfirmationFragment : Fragment() {
         val btnPay = view.findViewById<View>(R.id.btnPay)
 
         btnPay.setOnClickListener {
-
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, EnterPinFragment())
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.action_paymentConfirmationFragment_to_enterPinFragment)
         }
     }
 }

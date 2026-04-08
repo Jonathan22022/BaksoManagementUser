@@ -6,6 +6,7 @@ import android.view.*
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.baksomanagement.R
+import androidx.navigation.fragment.findNavController
 
 class CheckoutFragment : Fragment() {
 
@@ -33,12 +34,7 @@ class CheckoutFragment : Fragment() {
             .setTitle("Konfirmasi Order")
             .setMessage("Apakah orderan sudah sesuai?")
             .setPositiveButton("Ya") { _, _ ->
-
-                // PINDAH KE PAYMENT
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, PaymentMethodFragment())
-                    .addToBackStack(null)
-                    .commit()
+                findNavController().navigate(R.id.action_checkoutFragment_to_paymentMethodFragment)
             }
             .setNegativeButton("Cek lagi", null)
             .show()

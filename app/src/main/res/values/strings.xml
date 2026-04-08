@@ -10,7 +10,14 @@
     <string name="menu_account">Account</string>
     <string name="menu_about_us">About Us</string>
     <string name="menu_favourite">Favourite</string>
+    <string name="menu_makanan">Menu</string>
     <string name="menu_history">History</string>
     <string name="menu_setting">Setting</string>
     <string name="menu_logout">Logout</string>
+    <string name="checkout">Checkout</string>
+    <string name="cart">Cart</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="payment_confirmation">Payment Confirmation</string>
+    <string name="enter_pin">Enter Pin</string>
+    <string name="payment_success">Payment Success</string>
 </resources>

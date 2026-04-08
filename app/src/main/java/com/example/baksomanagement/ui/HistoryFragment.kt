@@ -13,6 +13,7 @@ import com.example.baksomanagement.ui.HistoryAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.appcompat.app.AlertDialog
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 
 class HistoryFragment : Fragment() {
 
@@ -32,8 +33,8 @@ class HistoryFragment : Fragment() {
 
         recycler.layoutManager = LinearLayoutManager(requireContext())
 
-// 🔥 TEST KOSONGKAN
-// historyList.clear()
+        val fabDelete = view.findViewById<FloatingActionButton>(R.id.fabDelete)
+        adapter = HistoryAdapter(historyList)
 
         if (historyList.isEmpty()) {
             recycler.visibility = View.GONE
@@ -46,12 +47,9 @@ class HistoryFragment : Fragment() {
             recycler.adapter = adapter
         }
 
-// BUTTON TAMBAH PESANAN
+        // BUTTON TAMBAH PESANAN
         btnAddOrder.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, MenuFragment())
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.action_historyFragment_to_menuFragment)
         }
 
         // FAB DELETE

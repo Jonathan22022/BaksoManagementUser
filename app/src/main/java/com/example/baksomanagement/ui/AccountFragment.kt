@@ -1,6 +1,7 @@
 package com.example.baksomanagement.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -15,6 +16,8 @@ class AccountFragment : Fragment() {
 
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseClient.firestore
+
+    private val TAG = "AccountFragment"
 
     private lateinit var imgProfile: ImageView
     private lateinit var tvNama: TextView
@@ -36,6 +39,8 @@ class AccountFragment : Fragment() {
         tvPhone = view.findViewById(R.id.tvPhone)
         tvAccountAge = view.findViewById(R.id.tvAccountAge)
 
+        Log.d(TAG, "onCreateView dipanggil")
+
         loadUserData()
 
         return view
@@ -43,6 +48,7 @@ class AccountFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Log.d(TAG, "onResume dipanggil - reload data user")
         loadUserData()
     }
 
@@ -50,7 +56,10 @@ class AccountFragment : Fragment() {
 
         val userId = auth.currentUser?.uid
 
+        Log.d(TAG, "User ID: $userId")
+
         if (userId == null) {
+            Log.e(TAG, "User belum login")
             Toast.makeText(requireContext(), "User belum login", Toast.LENGTH_SHORT).show()
             return
         }
@@ -60,13 +69,23 @@ class AccountFragment : Fragment() {
             .get()
             .addOnSuccessListener { document ->
 
+                Log.d(TAG, "Firestore berhasil diambil")
+
                 if (document.exists()) {
+
+                    Log.d(TAG, "Document user ditemukan")
 
                     val nama = document.getString("nama")
                     val email = document.getString("email")
                     val phone = document.getString("noTelp")
                     val imageUrl = document.getString("profilePicture")
                     val createdAt = document.getLong("createdAt") ?: 0L
+
+                    Log.d(TAG, "Nama: $nama")
+                    Log.d(TAG, "Email: $email")
+                    Log.d(TAG, "Phone: $phone")
+                    Log.d(TAG, "Image URL: $imageUrl")
+                    Log.d(TAG, "Created At: $createdAt")
 
                     tvNama.text = nama
                     tvEmail.text = email
@@ -75,10 +94,17 @@ class AccountFragment : Fragment() {
                     // load foto profil
                     if (!imageUrl.isNullOrEmpty()) {
 
+                        Log.d(TAG, "Load gambar dengan Glide")
+
                         Glide.with(this)
                             .load(imageUrl)
                             .placeholder(R.drawable.ic_account_)
                             .into(imgProfile)
+
+                    } else {
+
+                        Log.d(TAG, "Image URL kosong, gunakan placeholder")
+
                     }
 
                     // hitung usia akun
@@ -89,6 +115,8 @@ class AccountFragment : Fragment() {
                     val months = days / 30
                     val years = days / 365
 
+                    Log.d(TAG, "Days: $days, Months: $months, Years: $years")
+
                     val ageText = when {
                         years > 0 -> "$years tahun"
                         months > 0 -> "$months bulan"
@@ -97,9 +125,17 @@ class AccountFragment : Fragment() {
 
                     tvAccountAge.text = ageText
 
+                    Log.d(TAG, "Account age: $ageText")
+
+                } else {
+
+                    Log.e(TAG, "Document user tidak ditemukan")
+
                 }
             }
-            .addOnFailureListener {
+            .addOnFailureListener { e ->
+
+                Log.e(TAG, "Gagal mengambil data user", e)
 
                 Toast.makeText(
                     requireContext(),

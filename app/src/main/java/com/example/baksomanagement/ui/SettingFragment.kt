@@ -15,9 +15,11 @@ import com.cloudinary.android.callback.UploadCallback
 import com.example.baksomanagement.R
 import com.example.baksomanagement.data.remote.FirebaseClient
 import com.google.firebase.auth.FirebaseAuth
+import android.util.Log
 
 class SettingFragment : Fragment() {
 
+    private val TAG = "SettingFragment"
     private var imageUri: Uri? = null
     private var imgProfile: ImageView? = null
 
@@ -29,6 +31,7 @@ class SettingFragment : Fragment() {
             uri?.let {
                 imageUri = it
                 imgProfile?.setImageURI(it)
+                Log.d(TAG, "Image dipilih dari galeri: $uri")
             }
         }
 
@@ -71,15 +74,15 @@ class SettingFragment : Fragment() {
 
         val user = auth.currentUser ?: return
         val uid = user.uid
-
+        Log.d(TAG, "Menghapus akun UID: $uid")
         firestore.collection("users")
             .document(uid)
             .delete()
             .addOnSuccessListener {
-
+                Log.d(TAG, "Data Firestore berhasil dihapus")
                 user.delete()
                     .addOnSuccessListener {
-
+                        Log.d(TAG, "Akun Auth berhasil dihapus")
                         Toast.makeText(
                             requireContext(),
                             "Akun berhasil dihapus",
@@ -89,7 +92,7 @@ class SettingFragment : Fragment() {
                         goToFirstPage()
                     }
                     .addOnFailureListener {
-
+                        Log.e(TAG, "Gagal menghapus Auth user", it)
                         Toast.makeText(
                             requireContext(),
                             "Gagal menghapus akun",
@@ -120,8 +123,8 @@ class SettingFragment : Fragment() {
 
     private fun showEditProfileDialog() {
 
+        Log.d(TAG, "Membuka dialog edit profile")
         val dialogView = layoutInflater.inflate(R.layout.dialog_edit_profile, null)
-
         imgProfile = dialogView.findViewById(R.id.imgProfileEdit)
         val etNama = dialogView.findViewById<EditText>(R.id.etNama)
         val etEmail = dialogView.findViewById<EditText>(R.id.etEmail)
@@ -140,12 +143,16 @@ class SettingFragment : Fragment() {
             .document(uid)
             .get()
             .addOnSuccessListener { doc ->
-
+                Log.d(TAG, "Data user berhasil diambil")
                 etNama.setText(doc.getString("nama"))
                 etEmail.setText(doc.getString("email"))
                 etPhone.setText(doc.getString("noTelp"))
-
                 val imageUrl = doc.getString("profilePicture")
+
+                Log.d(TAG, "Nama: $etNama")
+                Log.d(TAG, "Email: $etEmail")
+                Log.d(TAG, "Phone: $etPhone")
+                Log.d(TAG, "Image URL: $imageUrl")
 
                 if (!imageUrl.isNullOrEmpty()) {
 
@@ -175,44 +182,49 @@ class SettingFragment : Fragment() {
             val email = etEmail.text.toString()
             val phone = etPhone.text.toString()
 
+            Log.d(TAG, "Klik Save Profile")
+            Log.d(TAG, "Nama: $nama")
+            Log.d(TAG, "Email: $email")
+            Log.d(TAG, "Phone: $phone")
+
             if (imageUri != null) {
-
+                Log.d(TAG, "Upload gambar baru ke Cloudinary")
                 uploadProfileImage(imageUri!!) { imageUrl ->
-
                     updateUser(uid, nama, email, phone, imageUrl)
-
                     dialog.dismiss()
                 }
 
             } else {
-
+                Log.d(TAG, "Tidak ada gambar baru")
                 updateUser(uid, nama, email, phone, null)
-
                 dialog.dismiss()
             }
         }
     }
 
     private fun uploadProfileImage(uri: Uri, onComplete: (String) -> Unit) {
-
+        Log.d(TAG, "Mulai upload ke Cloudinary: $uri")
         MediaManager.get()
             .upload(uri)
             .option("folder", "profile_images")
             .callback(object : UploadCallback {
 
-                override fun onStart(requestId: String?) {}
+                override fun onStart(requestId: String?) {
+                    Log.d(TAG, "Upload dimulai")
+                }
 
-                override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {}
+                override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {
+                    Log.d(TAG, "Upload progress: $bytes / $totalBytes")
+                }
 
                 override fun onSuccess(requestId: String?, resultData: Map<*, *>?) {
-
                     val imageUrl = resultData?.get("secure_url").toString()
-
+                    Log.d(TAG, "Upload berhasil. URL: $imageUrl")
                     onComplete(imageUrl)
                 }
 
                 override fun onError(requestId: String?, error: ErrorInfo?) {
-
+                    Log.e(TAG, "Upload gagal: ${error?.description}")
                     Toast.makeText(
                         requireContext(),
                         "Upload gagal",
@@ -220,7 +232,9 @@ class SettingFragment : Fragment() {
                     ).show()
                 }
 
-                override fun onReschedule(requestId: String?, error: ErrorInfo?) {}
+                override fun onReschedule(requestId: String?, error: ErrorInfo?) {
+                    Log.e(TAG, "Upload dijadwalkan ulang")
+                }
             })
             .dispatch()
     }
@@ -232,7 +246,7 @@ class SettingFragment : Fragment() {
         phone: String,
         imageUrl: String?
     ) {
-
+        Log.d(TAG, "Update user Firestore")
         val updateMap = mutableMapOf<String, Any>(
             "nama" to nama,
             "email" to email,
@@ -248,7 +262,7 @@ class SettingFragment : Fragment() {
             .document(uid)
             .update(updateMap)
             .addOnSuccessListener {
-
+                Log.d(TAG, "Firestore update berhasil")
                 auth.currentUser?.updateEmail(email)
 
                 Toast.makeText(
@@ -256,6 +270,9 @@ class SettingFragment : Fragment() {
                     "Profile berhasil diupdate",
                     Toast.LENGTH_SHORT
                 ).show()
+            }
+            .addOnFailureListener {
+                Log.e(TAG, "Firestore update gagal", it)
             }
     }
 }

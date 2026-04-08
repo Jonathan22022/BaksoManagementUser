@@ -80,26 +80,99 @@
 
     <fragment
         android:id="@+id/menu_about_us"
-        android:name="com.example.baksomanagement.ui.SettingFragment"
+        android:name="com.example.baksomanagement.ui.AboutUsFragment"
         android:label="@string/menu_about_us"
         tools:layout="@layout/fragment_about_us"/>
 
     <fragment
         android:id="@+id/menu_account"
-        android:name="com.example.baksomanagement.ui.SettingFragment"
+        android:name="com.example.baksomanagement.ui.AccountFragment"
         android:label="@string/menu_account"
         tools:layout="@layout/fragment_account"/>
 
     <fragment
+        android:id="@+id/menu_makanan"
+        android:name="com.example.baksomanagement.ui.MenuFragment"
+        android:label="@string/menu_makanan"
+        tools:layout="@layout/fragment_menu"/>
+
+    <fragment
         android:id="@+id/menu_history"
         android:name="com.example.baksomanagement.ui.HistoryFragment"
-        android:label="History"
-        tools:layout="@layout/fragment_history"/>
+        android:label="@string/menu_history"
+        tools:layout="@layout/fragment_history">
+        <action
+            android:id="@+id/action_historyFragment_to_menuFragment"
+            app:destination="@id/menu_makanan"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/checkoutFragment"
+        android:name="com.example.baksomanagement.ui.CheckoutFragment"
+        android:label="@string/checkout"
+        tools:layout="@layout/fragment_checkout">
+        <action
+            android:id="@+id/action_checkoutFragment_to_paymentMethodFragment"
+            app:destination="@id/paymentMethodFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.baksomanagement.ui.CartFragment"
+        android:label="@string/cart"
+        tools:layout="@layout/fragment_cart">
+        <action
+            android:id="@+id/action_cartFragment_to_menuFragment"
+            app:destination="@id/menu_makanan"/>
+    </fragment>
 
     <fragment
         android:id="@+id/menu_favourite"
         android:name="com.example.baksomanagement.ui.FavouriteFragment"
-        android:label="Favourite"
+        android:label="@string/menu_favourite"
         tools:layout="@layout/fragment_favourite"/>
+
+    <fragment
+        android:id="@+id/paymentMethodFragment"
+        android:name="com.example.baksomanagement.ui.PaymentMethodFragment"
+        android:label="@string/payment_method"
+        tools:layout="@layout/fragment_payment_method">
+
+        <action
+            android:id="@+id/action_paymentMethodFragment_to_paymentConfirmationFragment"
+            app:destination="@id/paymentConfirmationFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/paymentConfirmationFragment"
+        android:name="com.example.baksomanagement.ui.PaymentConfirmationFragment"
+        android:label="@string/payment_confirmation"
+        tools:layout="@layout/fragment_payment_confirmation">
+
+        <action
+            android:id="@+id/action_paymentConfirmationFragment_to_enterPinFragment"
+            app:destination="@id/enterPinFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/enterPinFragment"
+        android:name="com.example.baksomanagement.ui.EnterPinFragment"
+        android:label="@string/enter_pin"
+        tools:layout="@layout/fragment_enter_pin">
+
+        <action
+            android:id="@+id/action_enterPinFragment_to_paymentSuccessFragment"
+            app:destination="@id/paymentSuccessFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/paymentSuccessFragment"
+        android:name="com.example.baksomanagement.ui.PaymentSuccessFragment"
+        android:label="@string/payment_success"
+        tools:layout="@layout/fragment_payment_success"/>
+
 
 </navigation>

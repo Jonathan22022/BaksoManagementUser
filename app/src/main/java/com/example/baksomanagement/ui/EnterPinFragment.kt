@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.example.baksomanagement.R
 
 class EnterPinFragment : Fragment() {
@@ -23,14 +24,7 @@ class EnterPinFragment : Fragment() {
         val btnVerify = view.findViewById<View>(R.id.btnVerify)
 
         btnVerify.setOnClickListener {
-
-            android.widget.Toast.makeText(
-                requireContext(),
-                "Pembayaran berhasil ✔️",
-                android.widget.Toast.LENGTH_SHORT
-            ).show()
-
-            // nanti bisa lanjut ke halaman sukses
+            findNavController().navigate(R.id.action_enterPinFragment_to_paymentSuccessFragment)
         }
     }
 }
