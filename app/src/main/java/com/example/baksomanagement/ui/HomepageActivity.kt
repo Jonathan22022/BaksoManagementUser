@@ -10,10 +10,46 @@ import com.example.baksomanagement.ui.*
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import android.widget.ImageView
+import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.example.baksomanagement.data.remote.FirebaseClient
+import com.google.firebase.auth.FirebaseAuth
 
 class HomepageActivity : AppCompatActivity() {
 
+    private val auth = FirebaseAuth.getInstance()
+    private val firestore = FirebaseClient.firestore
     private val authRepository = AuthRepository()
+
+    private fun loadHeaderUserData(imgProfile: ImageView, tvUserName: TextView) {
+
+        val userId = auth.currentUser?.uid ?: return
+
+        firestore.collection("users")
+            .document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+
+                if (document.exists()) {
+
+                    val nama = document.getString("nama")
+                    val imageUrl = document.getString("profilePicture")
+
+                    tvUserName.text = nama ?: "User"
+
+                    if (!imageUrl.isNullOrEmpty()) {
+
+                        Glide.with(this)
+                            .load(imageUrl)
+                            .placeholder(R.drawable.ic_account_)
+                            .circleCrop()
+                            .into(imgProfile)
+
+                    }
+                }
+            }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +58,11 @@ class HomepageActivity : AppCompatActivity() {
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigation)
         val navigationView = findViewById<NavigationView>(R.id.navigationDrawer)
+        val headerView = navigationView.getHeaderView(0)
+        val imgProfile = headerView.findViewById<ImageView>(R.id.imageViewProfile)
+        val tvUserName = headerView.findViewById<TextView>(R.id.tvUserName)
+        loadHeaderUserData(imgProfile, tvUserName)
+
         setSupportActionBar(toolbar)
         toolbar.setNavigationOnClickListener {
             drawerLayout.open()

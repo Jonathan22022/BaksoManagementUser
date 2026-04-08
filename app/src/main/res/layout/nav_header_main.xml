@@ -21,7 +21,8 @@
         android:src="@drawable/ic_account_"
         android:contentDescription="@string/nav_header_desc"
         android:background="@drawable/circle_background"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/CircleImage"/>
 
     <!-- Nama pengguna, ubah yang android:text agar menampilkan nama dari akun yang dilogin-->
     <TextView

@@ -22,7 +22,7 @@ class SettingFragment : Fragment() {
     private val TAG = "SettingFragment"
     private var imageUri: Uri? = null
     private var imgProfile: ImageView? = null
-
+    private var cameraUri: Uri? = null
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseClient.firestore
 
@@ -121,6 +121,31 @@ class SettingFragment : Fragment() {
         Toast.makeText(requireContext(), "Change Account", Toast.LENGTH_SHORT).show()
     }
 
+    private val takePictureLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) {
+                imageUri?.let {
+                    imgProfile?.setImageURI(it)
+                    Log.d(TAG, "Foto berhasil diambil dari kamera: $it")
+                }
+            }
+        }
+
+    private fun openCamera() {
+        val contentValues = android.content.ContentValues().apply {
+            put(android.provider.MediaStore.Images.Media.TITLE, "profile_picture")
+            put(android.provider.MediaStore.Images.Media.DESCRIPTION, "From Camera")
+        }
+
+        cameraUri = requireContext().contentResolver.insert(
+            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            contentValues
+        )
+
+        imageUri = cameraUri
+        takePictureLauncher.launch(cameraUri)
+    }
+
     private fun showEditProfileDialog() {
 
         Log.d(TAG, "Membuka dialog edit profile")
@@ -166,12 +191,21 @@ class SettingFragment : Fragment() {
 
         imgProfile!!.setOnClickListener {
 
-            val options = arrayOf("Galeri")
+            val options = arrayOf("Kamera", "Galeri")
 
             AlertDialog.Builder(requireContext())
                 .setTitle("Pilih Foto")
-                .setItems(options) { _, _ ->
-                    pickImageLauncher.launch("image/*")
+                .setItems(options) { _, which ->
+                    when (which) {
+                        0 -> {
+                            Log.d(TAG, "Membuka Kamera")
+                            openCamera()
+                        }
+                        1 -> {
+                            Log.d(TAG, "Membuka Galeri")
+                            pickImageLauncher.launch("image/*")
+                        }
+                    }
                 }
                 .show()
         }

@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_page">
 
     <LinearLayout
@@ -11,15 +12,14 @@
         android:padding="20dp">
 
         <!-- FOTO PROFIL -->
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgProfile"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_account_"
-            android:background="@drawable/profile_circle_bg"
-            android:padding="10dp"
-            android:scaleType="centerCrop"/>
+            app:shapeAppearanceOverlay="@style/CircleImage"/>
 
         <!-- NAMA -->
         <TextView

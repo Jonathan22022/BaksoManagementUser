@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.firebase.storage.ktx)
     implementation(libs.firebase.analytics)
+    implementation("com.google.android.material:material:1.11.0")
     implementation("com.cloudinary:cloudinary-android:2.3.1")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
