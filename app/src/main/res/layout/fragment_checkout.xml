@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E7B7B7">
+    android:background="@drawable/bg_page">
 
     <!-- HEADER -->
     <LinearLayout
@@ -44,122 +44,10 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>
 
-            <!-- CARD 1 -->
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCheckout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_card_white"
-                android:padding="12dp"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
-
-                <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/bakso"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="10dp">
-
-                    <TextView
-                        android:text="Bakso Keju"
-                        android:textStyle="bold"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"/>
-
-                    <TextView
-                        android:text="Campuran mie dan bihun"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"/>
-
-                    <TextView
-                        android:text="No adds on"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"/>
-
-                    <TextView
-                        android:text="Jumlah: 2 porsi"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"/>
-
-                    <TextView
-                        android:text="Total : Rp. 56.000,00"
-                        android:textStyle="bold"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"/>
-
-                    <Button
-                        android:text="Edit Orderan"
-                        android:backgroundTint="#E30000"
-                        android:textColor="#FFFFFF"
-                        android:layout_marginTop="6dp"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"/>
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <!-- CARD 2 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_card_white"
-                android:padding="12dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/bakso"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="10dp">
-
-                    <TextView
-                        android:text="Bakso Malang"
-                        android:textStyle="bold"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"/>
-
-                    <TextView
-                        android:text="Campuran mie dan bihun"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"/>
-
-                    <TextView
-                        android:text="No adds on"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"/>
-
-                    <TextView
-                        android:text="Jumlah: 1 porsi"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"/>
-
-                    <TextView
-                        android:text="Total : Rp. 28.000,00"
-                        android:textStyle="bold"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"/>
-
-                    <Button
-                        android:text="Edit Orderan"
-                        android:backgroundTint="#E30000"
-                        android:textColor="#FFFFFF"
-                        android:layout_marginTop="6dp"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"/>
-                </LinearLayout>
-
-            </LinearLayout>
+                android:layout_height="wrap_content"/>
 
             <!-- TOTAL -->
             <TextView

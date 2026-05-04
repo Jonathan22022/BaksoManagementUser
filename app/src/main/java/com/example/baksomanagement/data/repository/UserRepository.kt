@@ -2,6 +2,7 @@ package com.example.baksomanagement.data.repository
 
 import com.example.baksomanagement.data.model.User
 import com.example.baksomanagement.data.remote.FirebaseClient
+import kotlin.text.get
 
 class UserRepository {
 
@@ -40,6 +41,55 @@ class UserRepository {
             }
             .addOnFailureListener { e ->
                 onResult(false, e.message)
+            }
+    }
+
+    fun getCurrentUserData(
+        onResult: (User?) -> Unit
+    ) {
+        val userId = auth.currentUser?.uid
+
+        if (userId == null) {
+            onResult(null)
+            return
+        }
+
+        firestore.collection("users")
+            .document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+                val user = document.toObject(User::class.java)
+                onResult(user)
+            }
+            .addOnFailureListener {
+                onResult(null)
+            }
+    }
+
+    fun getCurrentUserDetail(
+        onResult: (User?, String?) -> Unit
+    ) {
+        val userId = auth.currentUser?.uid
+
+        if (userId == null) {
+            onResult(null, "User belum login")
+            return
+        }
+
+        firestore.collection("users")
+            .document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+
+                if (document.exists()) {
+                    val user = document.toObject(User::class.java)
+                    onResult(user, null)
+                } else {
+                    onResult(null, "Data user tidak ditemukan")
+                }
+            }
+            .addOnFailureListener { e ->
+                onResult(null, e.message)
             }
     }
 }

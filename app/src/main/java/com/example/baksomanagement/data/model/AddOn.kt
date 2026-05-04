@@ -1,6 +1,8 @@
 package com.example.baksomanagement.data.model
 
 data class AddOn(
+    val id: String = "",
     val name: String = "",
-    val price: Int = 0
+    val price: Int = 0,
+    val gambarUrl: String = ""
 )

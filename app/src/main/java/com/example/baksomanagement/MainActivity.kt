@@ -3,7 +3,7 @@ package com.example.baksomanagement
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.baksomanagement.data.remote.CloudinaryClient
-import com.example.baksomanagement.ui.FirstPageFragment
+import com.example.baksomanagement.ui.firstPage.FirstPageFragment
 
 class MainActivity : AppCompatActivity() {
 

@@ -3,15 +3,20 @@ package com.example.baksomanagement.ui
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.baksomanagement.R
 import com.example.baksomanagement.data.repository.MenuRepository
+import com.example.baksomanagement.ui.menu.DetailMenuFragment
+import com.example.baksomanagement.ui.menu.MenuAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HomepageFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private val repository = MenuRepository()
+    private lateinit var fabStatus: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,6 +30,14 @@ class HomepageFragment : Fragment() {
 
         loadMenu()
 
+        fabStatus = view.findViewById(R.id.fabStatus)
+        fabStatus.visibility = View.GONE
+        if (OrderSessionManager.lastOrderItems.isNotEmpty()) {
+            fabStatus.visibility = View.VISIBLE
+        }
+        fabStatus.setOnClickListener {
+            findNavController().navigate(R.id.action_homepageFragment_to_statusOrderanFragment)
+        }
         return view
     }
 
@@ -33,12 +46,14 @@ class HomepageFragment : Fragment() {
 
             val adapter = MenuAdapter(menuList) { menu ->
 
-                val fragment = DetailMenuFragment()
+                val bundle = Bundle().apply {
+                    putString("MENU_ID", menu.id)
+                }
 
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.home_fragment_container, fragment)
-                    .addToBackStack(null)
-                    .commit()
+                findNavController().navigate(
+                    R.id.action_homepageFragment_to_detailMenuFragment,
+                    bundle
+                )
             }
 
             recyclerView.adapter = adapter

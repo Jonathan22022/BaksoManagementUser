@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "158359510852-983lfd3quh7i7n34ov1btm88ojap9tc8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.baksomanagement",
+            "certificate_hash": "ea4b140a3054a03ddae7e80a0e8c5001071b2475"
+          }
+        },
+        {
           "client_id": "158359510852-4qa4f2cig83kb5jl4dojvuohc2ef0hf4.apps.googleusercontent.com",
           "client_type": 3
         }

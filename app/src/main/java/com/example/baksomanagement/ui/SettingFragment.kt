@@ -40,6 +40,7 @@ class SettingFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        /**setupNotificationSwitch(view)**/
         return inflater.inflate(R.layout.fragment_setting, container, false)
     }
 
@@ -50,7 +51,7 @@ class SettingFragment : Fragment() {
         }
 
         view.findViewById<View>(R.id.btnNotification).setOnClickListener {
-            Toast.makeText(requireContext(), "Notification Setting", Toast.LENGTH_SHORT).show()
+            /**setupNotificationSwitch()**/
         }
 
         view.findViewById<View>(R.id.btnLanguage).setOnClickListener {
@@ -69,6 +70,54 @@ class SettingFragment : Fragment() {
             showDeleteAccountDialog()
         }
     }
+
+    /**private fun setupNotificationSwitch(view: View) {
+
+        val switchNotification =
+            view.findViewById<Switch>(R.id.switchNotification)
+
+        val sharedPref = requireActivity()
+            .getSharedPreferences(
+                "app_settings",
+                AppCompatActivity.MODE_PRIVATE
+            )
+
+        switchNotification.isChecked =
+            sharedPref.getBoolean(
+                "global_notification",
+                true
+            )
+
+        switchNotification.setOnCheckedChangeListener { _, isChecked ->
+            if (!isChecked) {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Matikan Notifikasi?")
+                    .setMessage(
+                        "Pengingat tidak akan muncul."
+                    )
+                    .setPositiveButton("Ya") { _, _ ->
+                        sharedPref.edit()
+                            .putBoolean(
+                                "global_notification",
+                                false
+                            )
+                            .apply()
+                        switchNotification.isChecked = false
+                    }
+                    .setNegativeButton("Batal") { _, _ ->
+                        switchNotification.isChecked = true
+                    }
+                    .show()
+            } else {
+                sharedPref.edit()
+                    .putBoolean(
+                        "global_notification",
+                        true
+                    )
+                    .apply()
+            }
+        }
+    }**/
 
     private fun deleteAccount() {
 

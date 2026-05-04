@@ -23,6 +23,19 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerMenu"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/btnCart"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:text="Lihat Keranjang (0)"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:backgroundTint="#FF5722"
+        android:visibility="gone"/>
 
 </LinearLayout>
