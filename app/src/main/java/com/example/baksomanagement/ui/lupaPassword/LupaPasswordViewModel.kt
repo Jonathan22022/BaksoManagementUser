@@ -1,4 +1,4 @@
-package com.example.baksomanagement.viewmodel
+package com.example.baksomanagement.ui.lupaPassword
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

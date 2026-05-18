@@ -1,14 +1,14 @@
-package com.example.baksomanagement.ui
+package com.example.baksomanagement.ui.history
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.recyclerview.widget.RecyclerView
-import com.example.baksomanagement.data.model.History
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.example.baksomanagement.R
+import com.example.baksomanagement.data.model.History
 
 class HistoryAdapter(private val list: List<History>) :
     RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {

@@ -39,4 +39,16 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:src="@android:drawable/ic_menu_info_details"/>
+
+    <Button
+        android:id="@+id/btnStatusOrderan"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:text="Lihat Orderan"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:backgroundTint="#FF5722"
+        android:visibility="gone"/>
 </LinearLayout>

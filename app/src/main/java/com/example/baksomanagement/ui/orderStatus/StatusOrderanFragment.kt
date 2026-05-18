@@ -1,13 +1,11 @@
-package com.example.baksomanagement.ui
+package com.example.baksomanagement.ui.orderStatus
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.baksomanagement.R
 import androidx.recyclerview.widget.RecyclerView
+import com.example.baksomanagement.R
 
 class StatusOrderanFragment : Fragment() {
 

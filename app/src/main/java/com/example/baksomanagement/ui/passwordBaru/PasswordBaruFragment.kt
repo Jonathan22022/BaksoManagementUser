@@ -1,4 +1,4 @@
-package com.example.baksomanagement.ui
+package com.example.baksomanagement.ui.passwordBaru
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

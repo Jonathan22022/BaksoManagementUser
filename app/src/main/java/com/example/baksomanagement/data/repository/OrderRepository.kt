@@ -48,7 +48,8 @@ class OrderRepository {
                         "harga" to item.harga,
                         "quantity" to item.quantity,
                         "catatan" to item.catatan,
-                        "addons" to item.addons
+                        "addons" to item.addons,
+                        "imageUrl" to item.imageUrl
                     )
 
                     batch.set(itemRef, itemData)

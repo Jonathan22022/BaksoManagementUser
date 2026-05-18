@@ -12,12 +12,13 @@ import com.bumptech.glide.Glide
 import com.example.baksomanagement.data.remote.FirebaseClient
 import com.example.baksomanagement.data.repository.AuthRepository
 import com.example.baksomanagement.data.repository.UserRepository
-import com.example.baksomanagement.ui.HistoryFragment
-import com.example.baksomanagement.ui.HomepageFragment
-import com.example.baksomanagement.ui.SearchFragment
-import com.example.baksomanagement.ui.SettingFragment
+import com.example.baksomanagement.ui.history.HistoryFragment
+import com.example.baksomanagement.ui.homepage.HomepageFragment
+import com.example.baksomanagement.ui.search.SearchFragment
+import com.example.baksomanagement.ui.setting.SettingFragment
 import com.example.baksomanagement.ui.aboutUs.AboutUsFragment
 import com.example.baksomanagement.ui.favourite.FavouriteFragment
+import com.example.baksomanagement.utils.SessionManager
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
@@ -29,6 +30,11 @@ class HomepageActivity : AppCompatActivity() {
     private val firestore = FirebaseClient.firestore
     private lateinit var imageViewProfile: ImageView
     private lateinit var tvUserName: TextView
+
+    override fun onResume() {
+        super.onResume()
+        SessionManager.saveLoginSession(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +78,7 @@ class HomepageActivity : AppCompatActivity() {
                 R.id.menu_setting -> controller.navigate(R.id.menu_setting)
                 R.id.menu_logout -> {
                     authRepository.logout()
+                    SessionManager.clearSession(this)
                     val intent =
                         Intent(this, MainActivity::class.java) // activity yg ada FirstPageFragment
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

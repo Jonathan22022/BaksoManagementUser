@@ -1,19 +1,22 @@
-package com.example.baksomanagement.ui
+package com.example.baksomanagement.ui.orderStatus
 
-import androidx.recyclerview.widget.RecyclerView
-import com.example.baksomanagement.data.model.OrderItem
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.baksomanagement.R
-import android.util.Log
+import com.example.baksomanagement.data.model.OrderItem
 
 class OrderStatusAdapter(
     private val list: List<OrderItem>
 ) : RecyclerView.Adapter<OrderStatusAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val imgMenu: ImageView = view.findViewById(R.id.imgMenu)
         val tvNama: TextView = view.findViewById(R.id.tvNama)
         val tvAddon: TextView = view.findViewById(R.id.tvAddon)
         val tvQty: TextView = view.findViewById(R.id.tvQty)
@@ -30,6 +33,10 @@ class OrderStatusAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]
+        Glide.with(holder.imgMenu.context)
+            .load(item.imageUrl)
+            .into(holder.imgMenu)
+
         holder.tvNama.text = item.nama
         holder.tvQty.text = "Jumlah: ${item.quantity}"
         Log.e("CheckoutAdapter", "onBindViewHolder dipanggil dengan position: $position")

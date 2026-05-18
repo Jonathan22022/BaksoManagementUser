@@ -7,7 +7,7 @@
     app:startDestination="@id/homepageFragment">
     <fragment
         android:id="@+id/homepageFragment"
-        android:name="com.example.baksomanagement.ui.HomepageFragment"
+        android:name="com.example.baksomanagement.ui.homepage.HomepageFragment"
         android:label="Homepage">
         <action
             android:id="@+id/action_homepageFragment_to_detailMenuFragment"
@@ -19,13 +19,13 @@
 
     <fragment
         android:id="@+id/menu_search"
-        android:name="com.example.baksomanagement.ui.SearchFragment"
+        android:name="com.example.baksomanagement.ui.search.SearchFragment"
         android:label="@string/menu_search"
         tools:layout="@layout/fragment_search"/>
 
     <fragment
         android:id="@+id/menu_setting"
-        android:name="com.example.baksomanagement.ui.SettingFragment"
+        android:name="com.example.baksomanagement.ui.setting.SettingFragment"
         android:label="@string/menu_setting"
         tools:layout="@layout/fragment_setting"/>
 
@@ -63,12 +63,12 @@
 
     <fragment
         android:id="@+id/menu_history"
-        android:name="com.example.baksomanagement.ui.HistoryFragment"
+        android:name="com.example.baksomanagement.ui.history.HistoryFragment"
         android:label="@string/menu_history"
         tools:layout="@layout/fragment_history">
         <action
             android:id="@+id/action_historyFragment_to_menuFragment"
-            app:destination="@id/menu_makanan"/>
+            app:destination="@id/menu_detail_makanan"/>
     </fragment>
 
     <fragment
@@ -79,6 +79,10 @@
         <action
             android:id="@+id/action_checkoutFragment_to_homepageFragment"
             app:destination="@id/homepageFragment"/>
+        <action
+            android:id="@+id/action_checkoutFragment_to_detailMenuFragment"
+            app:destination="@id/menu_detail_makanan"/>
+
     </fragment>
 
     <fragment
@@ -99,7 +103,7 @@
 
     <fragment
         android:id="@+id/statusOrderanFragment"
-        android:name="com.example.baksomanagement.ui.StatusOrderanFragment"
+        android:name="com.example.baksomanagement.ui.orderStatus.StatusOrderanFragment"
         android:label="@string/statusOrderanFragment"
         tools:layout="@layout/fragment_status_orderan"/>
 </navigation>

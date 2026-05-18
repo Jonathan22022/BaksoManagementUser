@@ -119,6 +119,20 @@
                 android:background="@drawable/bg_card_white"/>
         </LinearLayout>
 
+        <!-- OUT OF STOCK LABEL -->
+        <TextView
+            android:id="@+id/tvOutOfStock"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="⚠️ Out of Stock"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_card_pink"
+            android:visibility="gone"/>
+
         <!-- ORDER BUTTON -->
         <Button
             android:id="@+id/btnOrder"

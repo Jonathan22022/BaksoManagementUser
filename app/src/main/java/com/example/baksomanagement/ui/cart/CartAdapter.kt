@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.baksomanagement.R
 import com.example.baksomanagement.data.model.Cart
 
@@ -17,7 +18,7 @@ class CartAdapter(private val cartList: List<Cart>) :
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val img = itemView.findViewById<ImageView>(R.id.imgCart)
+        val img = itemView.findViewById<ImageView>( R.id.imgCart)
         val name = itemView.findViewById<TextView>(R.id.tvName)
         val desc = itemView.findViewById<TextView>(R.id.tvDesc)
         val addons = itemView.findViewById<TextView>(R.id.tvAddons)
@@ -45,7 +46,6 @@ class CartAdapter(private val cartList: List<Cart>) :
         holder.addons.text = cart.addons
         holder.extra.text = cart.extra
         holder.total.text = "Total : Rp. ${cart.total}"
-        holder.img.setImageResource(cart.image)
         Log.e("CartAdapter", "onBindViewHolder dipanggil dengan position: $position")
         Log.e("CartAdapter", "Name: ${cart.name}")
         Log.e("CartAdapter", "Desc: ${cart.desc}")

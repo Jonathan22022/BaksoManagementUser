@@ -1,19 +1,18 @@
-package com.example.baksomanagement.ui
+package com.example.baksomanagement.ui.history
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.baksomanagement.R
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.baksomanagement.R
 import com.example.baksomanagement.data.model.History
-import com.example.baksomanagement.ui.HistoryAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import androidx.appcompat.app.AlertDialog
-import android.widget.Toast
-import androidx.navigation.fragment.findNavController
 
 class HistoryFragment : Fragment() {
 

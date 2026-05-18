@@ -1,15 +1,26 @@
 package com.example.baksomanagement
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.baksomanagement.data.remote.CloudinaryClient
 import com.example.baksomanagement.ui.firstPage.FirstPageFragment
+import com.example.baksomanagement.utils.NotificationHelper
+import com.example.baksomanagement.utils.SessionManager
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         CloudinaryClient.init(this)
+        NotificationHelper.createChannel(this)
+        if (SessionManager.isSessionActive(this)) {
+            val intent = Intent(this, HomepageActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+            return
+        }
         setContentView(R.layout.activity_main)
     }
 }

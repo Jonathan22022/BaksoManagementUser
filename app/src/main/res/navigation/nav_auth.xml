@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--nav_graph.xml-->
+<!--nav_auth.xml-->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
+    android:id="@+id/nav_auth"
     app:startDestination="@id/firstPageFragment">
 
     <fragment
@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.baksomanagement.ui.RegisterFragment"
+        android:name="com.example.baksomanagement.ui.register.RegisterFragment"
         android:label="Register">
 
         <action
@@ -34,7 +34,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.baksomanagement.ui.LoginFragment"
+        android:name="com.example.baksomanagement.ui.login.LoginFragment"
         android:label="Login">
         <action
             android:id="@+id/action_loginFragment_to_lupaPasswordFragment"
@@ -48,6 +48,6 @@
 
     <fragment
         android:id="@+id/lupaPasswordFragment"
-        android:name="com.example.baksomanagement.ui.LupaPasswordFragment"
+        android:name="com.example.baksomanagement.ui.lupaPassword.LupaPasswordFragment"
         android:label="Lupa Password"/>
 </navigation>
