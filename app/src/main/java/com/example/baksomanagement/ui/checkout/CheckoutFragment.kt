@@ -1,6 +1,8 @@
 package com.example.baksomanagement.ui.checkout
 
+import android.Manifest
 import android.app.AlertDialog
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,18 +21,26 @@ import com.example.baksomanagement.data.model.Order
 import com.example.baksomanagement.data.repository.OrderRepository
 import com.example.baksomanagement.ui.cart.CartManager
 import com.example.baksomanagement.ui.orderStatus.OrderSessionManager
-import com.google.firebase.auth.FirebaseAuth
-import android.Manifest
-import android.content.pm.PackageManager
-import androidx.core.content.ContextCompat
-import androidx.core.app.ActivityCompat
 import com.example.baksomanagement.utils.NotificationHelper
+import com.google.firebase.auth.FirebaseAuth
+
 class CheckoutFragment : Fragment() {
+
+    companion object {
+        private const val TAG = "CheckoutDebug"
+    }
 
     private lateinit var rvCheckout: RecyclerView
     private lateinit var tvGrandTotal: TextView
+    private lateinit var btnTambahPesanan: Button
+    private lateinit var btnCheckout: Button
 
     private val orderRepository = OrderRepository()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,36 +48,105 @@ class CheckoutFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val view = inflater.inflate(R.layout.fragment_checkout, container, false)
+        Log.d(TAG, "onCreateView")
+
+        val view = inflater.inflate(
+            R.layout.fragment_checkout,
+            container,
+            false
+        )
 
         rvCheckout = view.findViewById(R.id.rvCheckout)
         tvGrandTotal = view.findViewById(R.id.tvGrandTotal)
 
-        val btnCheckout = view.findViewById<Button>(R.id.btnCheckout)
+        btnTambahPesanan =
+            view.findViewById(R.id.btnTambahPesanan)
 
-        rvCheckout.layoutManager = LinearLayoutManager(requireContext())
-        requestNotificationPermission()
-        loadCheckoutItems()
+        btnCheckout =
+            view.findViewById(R.id.btnCheckout)
+
+        btnTambahPesanan.setOnClickListener {
+
+            findNavController().navigate(
+                R.id.action_checkoutFragment_to_menuFragment
+            )
+        }
 
         btnCheckout.setOnClickListener {
+
+            Log.d(TAG, "Button Checkout ditekan")
             showConfirmationDialog()
         }
+
+        rvCheckout.layoutManager =
+            LinearLayoutManager(requireContext())
+
+        requestNotificationPermission()
+
+        loadCheckoutItems()
 
         return view
     }
 
     private fun loadCheckoutItems() {
 
+        Log.d(TAG, "loadCheckoutItems()")
+
         val cartItems = CartManager.items
+
+        btnCheckout.visibility =
+            if (cartItems.isNotEmpty())
+                View.VISIBLE
+            else
+                View.GONE
+
+        Log.d(
+            TAG,
+            "Jumlah item dalam cart = ${cartItems.size}"
+        )
+
+        cartItems.forEachIndexed { index, item ->
+
+            val addonPrice =
+                item.addons.sumOf { it.price }
+
+            Log.d(
+                TAG,
+                """
+                Item #$index
+                Menu ID = ${item.menu_id}
+                Nama = ${item.nama}
+                Harga = ${item.harga}
+                Qty = ${item.quantity}
+                Addon Count = ${item.addons.size}
+                Addon Total = $addonPrice
+                """.trimIndent()
+            )
+        }
 
         val adapter = CheckoutAdapter(
             cartItems,
             onEditClick = { position ->
 
-                val selectedItem = cartItems[position]
+                Log.d(
+                    TAG,
+                    "Edit item position = $position"
+                )
+
+                val selectedItem =
+                    cartItems[position]
 
                 val bundle = Bundle().apply {
-                    putString("MENU_ID", selectedItem.menu_id)
+
+                    putString(
+                        "MENU_ID",
+                        selectedItem.menu_id
+                    )
+
+                    putInt(
+                        "EDIT_POSITION",
+                        position
+                    )
                 }
 
                 findNavController().navigate(
@@ -77,13 +158,20 @@ class CheckoutFragment : Fragment() {
 
         rvCheckout.adapter = adapter
 
-        val grandTotal = cartItems.sumOf { item ->
-            (item.harga + item.addons.sumOf { it.price }) * item.quantity
-        }
+        val grandTotal =
+            cartItems.sumOf { item ->
+                (
+                        item.harga +
+                                item.addons.sumOf { it.price }
+                        ) * item.quantity
+            }
 
         tvGrandTotal.text = "Rp $grandTotal"
 
-        Log.e("CheckoutFragment", "Grand Total: $grandTotal")
+        Log.d(
+            TAG,
+            "Grand Total = $grandTotal"
+        )
     }
 
     private fun showConfirmationDialog() {
@@ -94,13 +182,20 @@ class CheckoutFragment : Fragment() {
             .setPositiveButton("Ya") { _, _ ->
 
                 val userId =
-                    FirebaseAuth.getInstance().currentUser?.uid ?: "guest"
+                    FirebaseAuth.getInstance()
+                        .currentUser?.uid ?: "guest"
 
                 val cartItems = CartManager.items
 
-                val total = cartItems.sumOf {
-                    (it.harga + it.addons.sumOf { a -> a.price }) * it.quantity
-                }
+                val total =
+                    cartItems.sumOf {
+                        (
+                                it.harga +
+                                        it.addons.sumOf { addon ->
+                                            addon.price
+                                        }
+                                ) * it.quantity
+                    }
 
                 val order = Order(
                     userID = userId,
@@ -108,10 +203,17 @@ class CheckoutFragment : Fragment() {
                     status = "pending"
                 )
 
-                orderRepository.createOrder(order, cartItems) {
+                orderRepository.createOrder(
+                    order,
+                    cartItems
+                ) {
 
                     OrderSessionManager.lastOrderItems =
-                        cartItems.toMutableList()
+                        cartItems.map { item ->
+                            item.copy(
+                                addons = item.addons.toList()
+                            )
+                        }
 
                     CartManager.clear()
 
@@ -122,8 +224,6 @@ class CheckoutFragment : Fragment() {
                         )
                     }
 
-                    Log.e("CheckoutFragment", "Order berhasil dibuat")
-                    //tambahkan notification yang akan muncul di hp setelah menekan orderan sesuai dan di notificatiopn akan berisi orderan telah diterima masuk
                     if (
                         ContextCompat.checkSelfPermission(
                             requireContext(),
@@ -131,17 +231,22 @@ class CheckoutFragment : Fragment() {
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
 
-                        NotificationHelper.showOrderNotification(requireContext())
+                        NotificationHelper.showOrderNotification(
+                            requireContext()
+                        )
                     }
                 }
             }
-            .setNegativeButton("Cek lagi", null)
+            .setNegativeButton("Cek Lagi", null)
             .show()
     }
 
     private fun requestNotificationPermission() {
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+        if (
+            android.os.Build.VERSION.SDK_INT >=
+            android.os.Build.VERSION_CODES.TIRAMISU
+        ) {
 
             if (
                 ContextCompat.checkSelfPermission(
@@ -152,10 +257,22 @@ class CheckoutFragment : Fragment() {
 
                 ActivityCompat.requestPermissions(
                     requireActivity(),
-                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    arrayOf(
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ),
                     100
                 )
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d(TAG, "onDestroyView")
     }
 }

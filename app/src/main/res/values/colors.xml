@@ -11,4 +11,25 @@
     <color name="red">#FFD50000</color>
     <color name="nav_red">#D90004</color>
     <color name="nav_grey">#464948</color>
+
+    <!--background light-->
+    <color name="bg">#F5F5F5</color>
+    <color name="bg_end_firstpage">#F3EAEA</color>
+    <color name="bg_btnregister">#FFFFFF</color>
+    <color name="setting_card">#FFFFFF</color>
+    <color name="setting_text">#222222</color>
+    <color name="setting_stroke">#E5E5E5</color>
+    <color name="input_bg">#FFFFFF</color>
+    <color name="input_border">#D6D6D6</color>
+    <color name="primary_title">#7A2E2E</color>
+    <color name="text_secondary">#777777</color>
+    <color name="text_3">#666666</color>
+    <color name="text_4">#D50000</color>"
+    <color name="drawer_bg">#FFFFFF</color>
+    <color name="drawer_text">#222222</color>
+    <color name="drawer_icon">#464948</color>
+
+    <color name="bottom_nav_bg">#FFFFFF</color>
+    <color name="bottom_nav_active">#D90004</color>
+    <color name="bottom_nav_inactive">#464948</color>
 </resources>

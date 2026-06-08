@@ -43,7 +43,7 @@ class CartFragment : Fragment() {
 
         // BUTTON TAMBAHKAN PESANAN
         btnAddMenu.setOnClickListener {
-            findNavController().navigate(R.id.action_cartFragment_to_menuFragment)
+            //findNavController().navigate(R.id.action_cartFragment_to_menuFragment)
         }
 
         return view

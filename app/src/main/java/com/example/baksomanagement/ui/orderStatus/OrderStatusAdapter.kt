@@ -20,28 +20,44 @@ class OrderStatusAdapter(
         val tvNama: TextView = view.findViewById(R.id.tvNama)
         val tvAddon: TextView = view.findViewById(R.id.tvAddon)
         val tvQty: TextView = view.findViewById(R.id.tvQty)
+        val tvTotal: TextView = view.findViewById(R.id.tvTotal)
+        val status: String = "pending"
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_checkout, parent, false) // reuse layout
-        Log.e("CheckoutAdapter", "onCreateViewHolder dipanggil")
+            .inflate(R.layout.item_status_orderan, parent, false) // reuse layout
+        Log.e("StatusOrderanAdapter", "onCreateViewHolder dipanggil")
         return ViewHolder(view)
     }
 
-    override fun getItemCount() = list.size
+    override fun getItemCount(): Int {
+
+        Log.e(
+            "StatusOrderanAdapter",
+            "getItemCount = ${list.size}"
+        )
+
+        return list.size
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]
+        val total =
+            (item.harga +
+                    item.addons.sumOf { it.price }) *
+                    item.quantity
+
+        holder.tvTotal.text = "Rp $total"
         Glide.with(holder.imgMenu.context)
             .load(item.imageUrl)
             .into(holder.imgMenu)
 
         holder.tvNama.text = item.nama
         holder.tvQty.text = "Jumlah: ${item.quantity}"
-        Log.e("CheckoutAdapter", "onBindViewHolder dipanggil dengan position: $position")
-        Log.e("CheckoutAdapter", "Nama: ${item.nama}")
-        Log.e("CheckoutAdapter", "Jumlah: ${item.quantity}")
+        Log.e("StatusOrderanAdapter", "onBindViewHolder dipanggil dengan position: $position")
+        Log.e("StatusOrderanAdapter", "Nama: ${item.nama}")
+        Log.e("StatusOrderanAdapter", "Jumlah: ${item.quantity}")
         holder.tvAddon.text =
             if (item.addons.isEmpty()) "No add-on"
             else item.addons.joinToString(", ") { it.name }

@@ -1,54 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--fragment_homepage.xml-->
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#E6B8B7"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_page"
+    android:fillViewport="true">
 
-    <TextView
-        android:text="Welcome back, User"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="#8B2E2E"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:text="Previously Ordered"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="#8B2E2E"
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerMenu"
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"/>
+        android:layout_height="wrap_content">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:src="@android:drawable/ic_menu_info_details"/>
+        <TextView
+            android:id="@+id/tvWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selamat Datang 👋"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="@color/setting_text"/>
 
-    <Button
-        android:id="@+id/btnStatusOrderan"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"
-        android:text="Lihat Orderan"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:backgroundTint="#FF5722"
-        android:visibility="gone"/>
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Temukan menu favoritmu hari ini"
+            android:textSize="14sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pesanan Sebelumnya"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/setting_text"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.cardview.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            card_view:cardCornerRadius="18dp"
+            card_view:cardBackgroundColor="@color/setting_card"
+            card_view:cardElevation="3dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Menu Terfavorit"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/setting_text"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.cardview.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            card_view:cardCornerRadius="18dp"
+            card_view:cardBackgroundColor="@color/setting_card"
+            card_view:cardElevation="3dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerMostFav"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Menu Terpopuler"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/setting_text"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.cardview.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            card_view:cardCornerRadius="18dp"
+            card_view:cardBackgroundColor="@color/setting_card"
+            card_view:cardElevation="3dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerMostPopular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/btnFabStatus"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Lacak Pesanan"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#D50000"
+            android:layout_marginTop="20dp"/>
+
+    </LinearLayout>
+
+</ScrollView>

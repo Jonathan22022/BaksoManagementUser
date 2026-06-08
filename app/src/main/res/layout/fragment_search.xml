@@ -4,41 +4,97 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.search.SearchFragment"
-    android:background="@drawable/bg_page">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_page"
+    tools:context=".ui.search.SearchFragment">
 
-    <!-- Search bar -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <EditText
-            android:id="@+id/etSearch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Cari tugas berdasarkan judul..."
-            android:drawableStart="@android:drawable/ic_menu_search"
-            android:layout_marginTop="70dp"
-            android:background="@drawable/search_edittext_bg"
-            android:layout_marginBottom="12dp"/>
-
-        <!-- RecyclerView hasil pencarian -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewSearchResults"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <!-- Pesan jika tidak ada hasil -->
+        <!-- Title -->
         <TextView
-            android:id="@+id/tvNoResults"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Belum ada hasil pencarian"
-            android:textAlignment="center"
-            android:padding="16dp"
-            android:visibility="gone"/>
+            android:text="Cari Menu"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/primary_title"
+            android:gravity="center"
+            android:padding="12dp"
+            android:background="@drawable/bg_menu_title"/>
+
+        <!-- Search Box -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp">
+
+            <EditText
+                android:id="@+id/etSearch"
+                android:textColor="@color/setting_text"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:paddingHorizontal="16dp"
+                android:hint="Cari menu bakso..."
+                android:background="@android:color/transparent"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- RecyclerView -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewSearchResults"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="16dp"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Empty State -->
+        <LinearLayout
+            android:id="@+id/layoutEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginTop="40dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔍"
+                android:textSize="72sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Menu tidak ditemukan"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/setting_text"
+                android:layout_marginTop="12dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Coba gunakan kata kunci lain"
+                android:textSize="14sp"
+                android:textColor="@color/text_3"
+                android:layout_marginTop="6dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
+
 </FrameLayout>

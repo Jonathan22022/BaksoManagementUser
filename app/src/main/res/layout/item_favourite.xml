@@ -1,49 +1,68 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<!--item_favourite.xml-->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="12dp"
-    android:background="@drawable/bg_favourite_card"
-    android:orientation="horizontal"
-    android:padding="12dp">
-
-    <ImageView
-        android:id="@+id/imgMenu"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bakso"/>
+    card_view:cardCornerRadius="18dp"
+    card_view:cardElevation="4dp"
+    card_view:cardBackgroundColor="#FFFFFF">
 
     <LinearLayout
-        android:layout_marginStart="12dp"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tvMenuName"
-            android:text="Bakso Keju"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:textColor="#8B2E2E"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <!-- Gambar -->
+        <ImageView
+            android:id="@+id/imgMenu"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bakso"/>
 
-        <Button
-            android:id="@+id/btnMenu"
-            android:text="Lihat Menu"
-            android:textColor="#FFFFFF"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="#FF2E2E"
-            android:layout_width="160dp"
-            android:layout_height="40dp"/>
+        <!-- Informasi Menu -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvMenuName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bakso Keju"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/setting_text"/>"/>
+
+            <Button
+                android:id="@+id/btnMenu"
+                android:layout_width="130dp"
+                android:layout_height="40dp"
+                android:text="Lihat Detail"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:backgroundTint="#E30000"
+                android:layout_marginTop="12dp"/>
+
+        </LinearLayout>
+
+        <!-- Icon Favorite -->
+        <ImageView
+            android:id="@+id/imgFav"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_star"
+            app:tint="#FFC107"/>
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imgFav"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_star"/>
-
-</LinearLayout>
+</androidx.cardview.widget.CardView>

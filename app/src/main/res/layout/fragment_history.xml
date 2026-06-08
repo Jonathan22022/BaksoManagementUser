@@ -2,11 +2,11 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/bg_page"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_page">
 
-    <!-- SEMUA KONTEN UTAMA -->
+    <!-- CONTENT -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -25,57 +25,63 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/bg_tab_active"
                 android:text="Completed"
-                android:textColor="#FFFFFF"
-                android:background="@drawable/bg_tab_active"/>
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnCancelled"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@android:color/transparent"
                 android:text="Cancelled"
-                android:textColor="#8B2E2E"
-                android:background="@android:color/transparent"/>
+                android:textAllCaps="false"
+                android:textColor="@color/setting_text"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
-        <!-- DATE -->
+        <!-- DATE FILTER -->
         <LinearLayout
             android:id="@+id/dateFilter"
-            android:layout_below="@id/tabContainer"
-            android:layout_marginHorizontal="16dp"
             android:layout_width="match_parent"
             android:layout_height="45dp"
+            android:layout_below="@id/tabContainer"
+            android:layout_marginHorizontal="16dp"
             android:background="@drawable/bg_date_filter"
             android:gravity="center_vertical"
             android:paddingHorizontal="12dp">
 
             <TextView
                 android:id="@+id/tvDate"
-                android:text="Senin, 24 Januari 2025"
-                android:textColor="#8B2E2E"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"/>
+                android:text="24 Januari 2025"
+                android:textColor="@color/setting_text"
+                android:textStyle="bold" />
 
             <ImageView
-                android:src="@drawable/ic_calendar"
                 android:layout_width="24dp"
-                android:layout_height="24dp"/>
+                android:layout_height="24dp"
+                android:src="@drawable/ic_calendar"
+                app:tint="@color/setting_text" />
 
         </LinearLayout>
 
-        <!-- LIST -->
+        <!-- LIST HISTORY -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerHistory"
-            android:layout_below="@id/dateFilter"
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp"/>
+            android:layout_below="@id/dateFilter"
+            android:layout_marginTop="10dp"
+            android:padding="10dp" />
 
-        <!-- FAB -->
+        <!-- FAB DELETE -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabDelete"
             android:layout_width="wrap_content"
@@ -84,7 +90,8 @@
             android:layout_alignParentEnd="true"
             android:layout_margin="20dp"
             android:src="@drawable/ic_delete"
-            app:backgroundTint="#FF2E2E"/>
+            app:backgroundTint="@color/red"
+            app:tint="@android:color/white" />
 
     </RelativeLayout>
 
@@ -93,45 +100,47 @@
         android:id="@+id/layoutEmptyHistory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         android:padding="20dp"
         android:visibility="gone">
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="☹"
             android:textSize="80sp"
-            android:textColor="#8B2E2E"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:textColor="@color/red" />
 
         <TextView
-            android:text="Maaf, Belum ada Pesanan"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:layout_marginTop="12dp"
-            android:textColor="#8B2E2E"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:layout_marginTop="16dp"
+            android:text="Belum Ada Riwayat Pesanan"
+            android:textColor="@color/setting_text"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
-            android:text="Silahkan tambahkan menu untuk pesanan anda"
-            android:textSize="14sp"
-            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textColor="#8B2E2E"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:gravity="center"
+            android:text="Pesanan yang telah selesai akan muncul di sini"
+            android:textColor="@color/setting_text"
+            android:alpha="0.7"
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/btnAddOrder"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="Tambahkan Pesanan"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#FF1F1F"
-            android:layout_marginTop="16dp"/>
+            android:layout_width="220dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/red"
+            android:text="Pesan Sekarang"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

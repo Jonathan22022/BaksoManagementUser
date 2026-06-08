@@ -8,7 +8,7 @@
             android:title="Dashboard" />
         <item
             android:id="@+id/menu_search"
-            android:icon="@drawable/ic_search"
+            android:icon="@drawable/ic_search_"
             android:title="Search" />
         <item
             android:id="@+id/menu_history"

@@ -21,6 +21,25 @@ class MenuRepository {
             }
     }
 
+    fun searchMenu(
+        keyword: String,
+        onResult: (List<Menu>) -> Unit
+    ) {
+        firestore.collection("bakso")
+            .get()
+            .addOnSuccessListener { result ->
+
+                val menuList = result.documents.mapNotNull { doc ->
+                    doc.toObject(Menu::class.java)?.copy(id = doc.id)
+                }
+
+                val filteredList = menuList.filter {
+                    it.namaMenu.contains(keyword, ignoreCase = true)
+                }
+
+                onResult(filteredList)
+            }
+    }
 
     fun getMenuById(id: String, onResult: (Menu?) -> Unit) {
         firestore.collection("bakso").document(id)

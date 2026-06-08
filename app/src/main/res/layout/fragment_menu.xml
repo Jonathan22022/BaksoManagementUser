@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,14 +10,15 @@
 
     <!-- Title -->
     <TextView
+        android:id="@+id/tvMenuTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Menu"
+        android:text="Daftar Menu"
         android:textStyle="bold"
-        android:textSize="18sp"
-        android:textColor="#7A2E2E"
+        android:textSize="24sp"
+        android:textColor="@color/setting_text"
         android:gravity="center"
-        android:padding="12dp"
+        android:padding="16dp"
         android:background="@drawable/bg_menu_title"
         android:layout_marginBottom="16dp"/>
 
@@ -24,18 +26,22 @@
         android:id="@+id/recyclerMenu"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="12dp"/>
 
     <Button
         android:id="@+id/btnCart"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="12dp"
         android:text="Lihat Keranjang (0)"
-        android:textColor="#FFFFFF"
         android:textStyle="bold"
         android:textSize="16sp"
-        android:backgroundTint="#FF5722"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/red"
+        android:elevation="4dp"
         android:visibility="gone"/>
 
 </LinearLayout>

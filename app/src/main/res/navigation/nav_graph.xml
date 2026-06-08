@@ -80,26 +80,23 @@
             android:id="@+id/action_checkoutFragment_to_homepageFragment"
             app:destination="@id/homepageFragment"/>
         <action
+            android:id="@+id/action_checkoutFragment_to_menuFragment"
+            app:destination="@id/menu_makanan"/>
+        <action
             android:id="@+id/action_checkoutFragment_to_detailMenuFragment"
             app:destination="@id/menu_detail_makanan"/>
 
     </fragment>
 
     <fragment
-        android:id="@+id/cartFragment"
-        android:name="com.example.baksomanagement.ui.cart.CartFragment"
-        android:label="@string/cart"
-        tools:layout="@layout/fragment_cart">
-        <action
-            android:id="@+id/action_cartFragment_to_menuFragment"
-            app:destination="@id/menu_makanan"/>
-    </fragment>
-
-    <fragment
         android:id="@+id/menu_favourite"
         android:name="com.example.baksomanagement.ui.favourite.FavouriteFragment"
         android:label="@string/menu_favourite"
-        tools:layout="@layout/fragment_favourite"/>
+        tools:layout="@layout/fragment_favourite">
+        <action
+            android:id="@+id/action_favouriteFragment_to_detailMenuFragment"
+            app:destination="@id/menu_detail_makanan"/>
+    </fragment>
 
     <fragment
         android:id="@+id/statusOrderanFragment"

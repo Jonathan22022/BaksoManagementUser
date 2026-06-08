@@ -48,7 +48,7 @@ object NotificationHelper {
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     fun showOrderNotification(context: Context) {
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.mipmap.baksoku_foreground)
             .setContentTitle("BaksoKu")
             .setContentText("Orderan telah diterima masuk")
             .setPriority(NotificationCompat.PRIORITY_HIGH)

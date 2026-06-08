@@ -17,12 +17,15 @@ import androidx.navigation.fragment.findNavController
 import com.example.baksomanagement.HomepageActivity
 import com.example.baksomanagement.R
 import com.example.baksomanagement.ui.login.LoginViewModel
+import com.example.baksomanagement.utils.SavedAccountManager
 import com.example.baksomanagement.utils.SessionManager
 
 class LoginFragment : Fragment() {
 
     private val viewModel: LoginViewModel by viewModels()
     private val TAG = "LoginFragment"
+
+    private var currentEmail: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +53,8 @@ class LoginFragment : Fragment() {
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
+            currentEmail = email
+
             Log.d(TAG, "Tombol Login ditekan")
             Log.d(TAG, "Email: $email")
             Log.d(TAG, "Password length: ${password.length}")
@@ -65,10 +70,24 @@ class LoginFragment : Fragment() {
 
                 Log.i(TAG, "Login berhasil, membuka HomepageActivity")
 
-                Toast.makeText(requireContext(), "Login Berhasil", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Login Berhasil",
+                    Toast.LENGTH_SHORT
+                ).show()
+
                 SessionManager.saveLoginSession(requireContext())
-                val intent = Intent(requireContext(), HomepageActivity::class.java)
+
+                SavedAccountManager.saveAccount(
+                    requireContext(),
+                    currentEmail
+                )
+
+                val intent =
+                    Intent(requireContext(), HomepageActivity::class.java)
+
                 startActivity(intent)
+
                 requireActivity().finish()
 
             } else {
@@ -87,14 +106,20 @@ class LoginFragment : Fragment() {
 
         tvForgot.setOnClickListener {
 
-            findNavController().navigate(R.id.action_loginFragment_to_lupaPasswordFragment)
-
+            findNavController().navigate(
+                R.id.action_loginFragment_to_lupaPasswordFragment
+            )
         }
 
         val btnBack = view.findViewById<ImageView>(R.id.btnBack)
+
         btnBack.setOnClickListener {
+
             Log.d(TAG, "Tombol back ditekan")
-            findNavController().navigate(R.id.action_loginFragment_to_firstPageFragment)
+
+            findNavController().navigate(
+                R.id.action_loginFragment_to_firstPageFragment
+            )
         }
     }
 

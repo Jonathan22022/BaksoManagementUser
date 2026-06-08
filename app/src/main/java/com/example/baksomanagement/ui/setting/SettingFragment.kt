@@ -3,6 +3,9 @@ package com.example.baksomanagement.ui.setting
 import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
+import com.example.baksomanagement.MainActivity
+import com.example.baksomanagement.utils.SavedAccountManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -25,7 +28,10 @@ import com.cloudinary.android.callback.ErrorInfo
 import com.cloudinary.android.callback.UploadCallback
 import com.example.baksomanagement.R
 import com.example.baksomanagement.data.remote.FirebaseClient
+import com.example.baksomanagement.utils.SessionManager
 import com.google.firebase.auth.FirebaseAuth
+import androidx.appcompat.app.AppCompatDelegate
+import com.example.baksomanagement.utils.ThemeManager
 
 class SettingFragment : Fragment() {
 
@@ -76,7 +82,7 @@ class SettingFragment : Fragment() {
         }
 
         view.findViewById<View>(R.id.btnBackground).setOnClickListener {
-            Toast.makeText(requireContext(), "Background Setting", Toast.LENGTH_SHORT).show()
+            showThemeDialog()
         }
 
         view.findViewById<View>(R.id.btnChangeAccount).setOnClickListener {
@@ -209,11 +215,46 @@ class SettingFragment : Fragment() {
 
     private fun showChangeAccountDialog() {
 
-        Toast.makeText(
-            requireContext(),
-            "Change Account",
-            Toast.LENGTH_SHORT
-        ).show()
+        val accounts =
+            SavedAccountManager.getAccounts(requireContext())
+
+        if (accounts.isEmpty()) {
+
+            Toast.makeText(
+                requireContext(),
+                "Belum ada akun tersimpan",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            return
+        }
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Pilih Akun")
+            .setItems(accounts.toTypedArray()) { _, which ->
+                val selectedEmail = accounts[which]
+                auth.signOut()
+                SessionManager.clearSession(requireContext())
+
+                Toast.makeText(
+                    requireContext(),
+                    "Silakan login ke akun: $selectedEmail",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                val intent =
+                    Intent(requireContext(), MainActivity::class.java)
+
+                intent.flags =
+                    Intent.FLAG_ACTIVITY_NEW_TASK or
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+                startActivity(intent)
+
+                requireActivity().finish()
+            }
+            .setNegativeButton("Batal", null)
+            .show()
     }
 
     private val takePictureLauncher =
@@ -453,5 +494,55 @@ class SettingFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+    }
+
+    private fun showThemeDialog() {
+
+        val options = arrayOf(
+            "Light Mode",
+            "Dark Mode"
+        )
+
+        val currentTheme =
+            ThemeManager.getTheme(requireContext())
+
+        val checkedItem =
+            when (currentTheme) {
+                ThemeManager.DARK -> 1
+                else -> 0
+            }
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Pilih Background Mode")
+            .setSingleChoiceItems(
+                options,
+                checkedItem
+            ) { dialog, which ->
+
+                val selectedTheme =
+                    if (which == 0)
+                        ThemeManager.LIGHT
+                    else
+                        ThemeManager.DARK
+
+                ThemeManager.saveTheme(
+                    requireContext(),
+                    selectedTheme
+                )
+
+                ThemeManager.applyTheme(
+                    selectedTheme
+                )
+
+                dialog.dismiss()
+
+                Toast.makeText(
+                    requireContext(),
+                    "Theme berhasil diubah",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            .setNegativeButton("Batal", null)
+            .show()
     }
 }

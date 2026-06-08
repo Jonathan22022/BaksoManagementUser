@@ -22,6 +22,7 @@ import com.example.baksomanagement.utils.SessionManager
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.example.baksomanagement.utils.ThemeManager
 
 class HomepageActivity : AppCompatActivity() {
 
@@ -37,6 +38,9 @@ class HomepageActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        ThemeManager.applyTheme(
+            ThemeManager.getTheme(this)
+        )
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_homepage)
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
@@ -61,7 +65,6 @@ class HomepageActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.menu_home -> controller.navigate(R.id.homepageFragment)
                 R.id.menu_makanan -> controller.navigate(R.id.menu_makanan)
-                R.id.menu_cart -> controller.navigate(R.id.cartFragment)
                 R.id.menu_account -> controller.navigate(R.id.menu_account)
             }
             true
