@@ -8,6 +8,7 @@ import com.example.baksomanagement.ui.firstPage.FirstPageFragment
 import com.example.baksomanagement.utils.NotificationHelper
 import com.example.baksomanagement.utils.SessionManager
 import com.example.baksomanagement.utils.ThemeManager
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,9 +19,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         CloudinaryClient.init(this)
         NotificationHelper.createChannel(this)
-        if (SessionManager.isSessionActive(this)) {
+        if (FirebaseAuth.getInstance().currentUser != null) {
+
             val intent = Intent(this, HomepageActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+            intent.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+
             startActivity(intent)
             finish()
             return

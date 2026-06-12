@@ -54,7 +54,6 @@
             app:destination="@id/checkoutFragment"/>
     </fragment>
 
-
     <fragment
         android:id="@+id/menu_detail_makanan"
         android:name="com.example.baksomanagement.ui.menu.DetailMenuFragment"
@@ -67,8 +66,19 @@
         android:label="@string/menu_history"
         tools:layout="@layout/fragment_history">
         <action
-            android:id="@+id/action_historyFragment_to_menuFragment"
-            app:destination="@id/menu_detail_makanan"/>
+            android:id="@+id/action_historyFragment_to_detailHistoryOrderanUserFragment"
+            app:destination="@id/menu_detail_history_orderan"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/menu_detail_history_orderan"
+        android:name="com.example.baksomanagement.ui.history.DetailHistoryOrderanUserFragment"
+        android:label="@string/menu_detail_history_orderan"
+        tools:layout="@layout/fragment_detail_history_orderan_user">
+        <action
+            android:id="@+id/action_detailHistoryOrderanUserFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment"/>
     </fragment>
 
     <fragment
@@ -102,5 +112,12 @@
         android:id="@+id/statusOrderanFragment"
         android:name="com.example.baksomanagement.ui.orderStatus.StatusOrderanFragment"
         android:label="@string/statusOrderanFragment"
-        tools:layout="@layout/fragment_status_orderan"/>
+        tools:layout="@layout/fragment_status_orderan">
+        <action
+            android:id="@+id/action_statusOrderanFragment_to_homepageFragment"
+            app:destination="@id/homepageFragment"/>
+        <action
+            android:id="@+id/action_statusOrderanFragment_to_menuFragment"
+            app:destination="@id/menu_makanan"/>
+    </fragment>
 </navigation>

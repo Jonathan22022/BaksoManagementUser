@@ -15,10 +15,10 @@
         android:layout_height="wrap_content"
         android:text="Daftar Menu"
         android:textStyle="bold"
-        android:textSize="24sp"
-        android:textColor="@color/setting_text"
+        android:textSize="18sp"
+        android:textColor="@color/primary_title"
         android:gravity="center"
-        android:padding="16dp"
+        android:padding="12dp"
         android:background="@drawable/bg_menu_title"
         android:layout_marginBottom="16dp"/>
 

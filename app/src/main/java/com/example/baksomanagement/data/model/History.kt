@@ -1,11 +1,19 @@
 package com.example.baksomanagement.data.model
 
-
 data class History(
-    val name: String,
-    val date: String,
-    val desc: String,
-    val price: String,
-    val image: Int,
-    val status: String
+
+    val orderId: String = "",
+
+    val nama: String = "",
+
+    val imageUrl: String = "",
+
+    val quantity: Int = 0,
+
+    val total: Int = 0,
+
+    val status: String = "",
+
+    val createdAt: Long = System.currentTimeMillis(),
+    var selected: Boolean = false
 )

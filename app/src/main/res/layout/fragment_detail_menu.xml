@@ -195,7 +195,21 @@
             android:text="Tambah ke Keranjang"
             android:textColor="@android:color/white"
             android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:visibility="visible"/>
+
+        <!--Update Menu Orderan-->
+        <Button
+            android:id="@+id/btnUpdateOrder"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/red"
+            android:text="Ubah Pesanan"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

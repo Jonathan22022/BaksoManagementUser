@@ -76,8 +76,6 @@ class LoginFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
 
-                SessionManager.saveLoginSession(requireContext())
-
                 SavedAccountManager.saveAccount(
                     requireContext(),
                     currentEmail

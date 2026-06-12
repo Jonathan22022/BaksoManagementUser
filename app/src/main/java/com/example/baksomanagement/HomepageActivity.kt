@@ -6,19 +6,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.bumptech.glide.Glide
+import androidx.appcompat.app.AlertDialog
 import com.example.baksomanagement.data.remote.FirebaseClient
 import com.example.baksomanagement.data.repository.AuthRepository
 import com.example.baksomanagement.data.repository.UserRepository
-import com.example.baksomanagement.ui.history.HistoryFragment
-import com.example.baksomanagement.ui.homepage.HomepageFragment
-import com.example.baksomanagement.ui.search.SearchFragment
-import com.example.baksomanagement.ui.setting.SettingFragment
-import com.example.baksomanagement.ui.aboutUs.AboutUsFragment
-import com.example.baksomanagement.ui.favourite.FavouriteFragment
-import com.example.baksomanagement.utils.SessionManager
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
@@ -32,10 +25,6 @@ class HomepageActivity : AppCompatActivity() {
     private lateinit var imageViewProfile: ImageView
     private lateinit var tvUserName: TextView
 
-    override fun onResume() {
-        super.onResume()
-        SessionManager.saveLoginSession(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemeManager.applyTheme(
@@ -80,13 +69,28 @@ class HomepageActivity : AppCompatActivity() {
                 R.id.menu_about_us -> controller.navigate(R.id.menu_about_us)
                 R.id.menu_setting -> controller.navigate(R.id.menu_setting)
                 R.id.menu_logout -> {
-                    authRepository.logout()
-                    SessionManager.clearSession(this)
-                    val intent =
-                        Intent(this, MainActivity::class.java) // activity yg ada FirstPageFragment
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                    finish()
+
+                    AlertDialog.Builder(this)
+                        .setTitle("Logout")
+                        .setMessage("Apakah Anda yakin ingin logout?")
+                        .setPositiveButton("Ya") { _, _ ->
+
+                            authRepository.logout()
+
+                            val intent =
+                                Intent(this, MainActivity::class.java)
+
+                            intent.flags =
+                                Intent.FLAG_ACTIVITY_NEW_TASK or
+                                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+                            startActivity(intent)
+                            finish()
+                        }
+                        .setNegativeButton("Batal") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .show()
                 }
             }
             drawerLayout.close()

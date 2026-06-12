@@ -30,7 +30,10 @@ import com.google.firebase.auth.FirebaseAuth
 class DetailMenuFragment : Fragment() {
 
     private val TAG = "DetailMenuDebug"
+    private var editPosition = -1
+    private var isEditMode = false
 
+    private lateinit var btnUpdateOrder: Button
     private lateinit var menuRepository: MenuRepository
     private lateinit var bahanRepository: BahanBakuRepository
 
@@ -62,6 +65,14 @@ class DetailMenuFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         menuId = arguments?.getString("MENU_ID") ?: ""
+
+        editPosition =
+            arguments?.getInt(
+                "EDIT_POSITION",
+                -1
+            ) ?: -1
+
+        isEditMode = editPosition != -1
 
         Log.d(TAG, "onCreate")
         Log.d(TAG, "MENU_ID = $menuId")
@@ -101,7 +112,7 @@ class DetailMenuFragment : Fragment() {
         tvTotal = view.findViewById(R.id.tvTotal)
         tvOutOfStock = view.findViewById(R.id.tvOutOfStock)
         btnOrder = view.findViewById(R.id.btnOrder)
-
+        btnUpdateOrder = view.findViewById(R.id.btnUpdateOrder)
         val btnPlus = view.findViewById<Button>(R.id.btnPlus)
         val btnMinus = view.findViewById<Button>(R.id.btnMinus)
 
@@ -192,6 +203,36 @@ class DetailMenuFragment : Fragment() {
             imageUrl = menu.gambarUrl
             basePrice = menu.harga
 
+            if (isEditMode) {
+
+                val oldItem =
+                    CartManager.items[editPosition]
+
+                quantity = oldItem.quantity
+
+                tvQty.text =
+                    quantity.toString()
+
+                selectedAddons.clear()
+
+                selectedAddons.addAll(
+                    oldItem.addons
+                )
+
+                selectedAddonPrice =
+                    oldItem.addons.sumOf {
+                        it.price
+                    }
+
+                updateTotal()
+
+                btnOrder.visibility =
+                    View.GONE
+
+                btnUpdateOrder.visibility =
+                    View.VISIBLE
+            }
+
             updateTotal()
 
             Glide.with(requireContext())
@@ -224,6 +265,36 @@ class DetailMenuFragment : Fragment() {
 
                 updateTotal()
             }
+        }
+
+        btnUpdateOrder.setOnClickListener {
+
+            val updatedItem =
+                OrderItem(
+                    menu_id = menuId,
+                    nama = tvName.text.toString(),
+                    harga = basePrice,
+                    quantity = quantity,
+                    catatan = "",
+                    addons = selectedAddons.toMutableList(),
+                    imageUrl = imageUrl
+                )
+
+            CartManager.updateItem(
+                editPosition,
+                updatedItem
+            )
+
+            Toast.makeText(
+                requireContext(),
+                "Pesanan berhasil diubah",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            findNavController().popBackStack(
+                R.id.checkoutFragment,
+                false
+            )
         }
 
         addOnRepository.getAddOnList { addOnList ->
@@ -281,61 +352,47 @@ class DetailMenuFragment : Fragment() {
             }
         }
 
-        btnOrder.setOnClickListener {
+        if (!isEditMode) {
+            btnOrder.setOnClickListener {
 
-            val totalHarga =
-                (basePrice + selectedAddonPrice) * quantity
+                val totalHarga =
+                    (basePrice + selectedAddonPrice) * quantity
 
-            val userId =
-                FirebaseAuth.getInstance()
-                    .currentUser?.uid ?: "guest"
+                val userId =
+                    FirebaseAuth.getInstance()
+                        .currentUser?.uid ?: "guest"
 
-            Log.d(TAG, "=== ORDER ===")
-            Log.d(TAG, "User ID = $userId")
-            Log.d(TAG, "Menu ID = $menuId")
-            Log.d(TAG, "Qty = $quantity")
-            Log.d(TAG, "Base Price = $basePrice")
-            Log.d(TAG, "Addon Price = $selectedAddonPrice")
-            Log.d(TAG, "Total = $totalHarga")
-            Log.d(TAG, "Addon Count = ${selectedAddons.size}")
+                Log.d(TAG, "=== ORDER ===")
+                Log.d(TAG, "User ID = $userId")
+                Log.d(TAG, "Menu ID = $menuId")
+                Log.d(TAG, "Qty = $quantity")
+                Log.d(TAG, "Base Price = $basePrice")
+                Log.d(TAG, "Addon Price = $selectedAddonPrice")
+                Log.d(TAG, "Total = $totalHarga")
+                Log.d(TAG, "Addon Count = ${selectedAddons.size}")
 
-            val order = Order(
-                userID = userId,
-                total = totalHarga,
-                status = "pending"
-            )
+                val item = OrderItem(
+                    menu_id = menuId,
+                    nama = tvName.text.toString(),
+                    harga = basePrice,
+                    quantity = quantity,
+                    catatan = "",
+                    addons = selectedAddons,
+                    imageUrl = imageUrl
+                )
 
-            val item = OrderItem(
-                menu_id = menuId,
-                nama = tvName.text.toString(),
-                harga = basePrice,
-                quantity = quantity,
-                catatan = "",
-                addons = selectedAddons,
-                imageUrl = imageUrl
-            )
+                Log.d(TAG, "Menambahkan item ke CartManager")
 
-            Log.d(TAG, "Menambahkan item ke CartManager")
+                CartManager.addItem(item)
 
-            CartManager.addItem(item)
+                Toast.makeText(
+                    requireContext(),
+                    "Ditambahkan ke Keranjang",
+                    Toast.LENGTH_SHORT
+                ).show()
 
-            orderRepository.createOrder(
-                order,
-                listOf(item)
-            ) {
+                findNavController().navigateUp()
 
-                Log.d(TAG, "Order berhasil dibuat")
-
-                requireActivity().runOnUiThread {
-
-                    Toast.makeText(
-                        requireContext(),
-                        "Order ditambahkan",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    findNavController().popBackStack()
-                }
             }
         }
     }
@@ -420,10 +477,15 @@ class DetailMenuFragment : Fragment() {
 
         if (bahanList.isEmpty()) {
 
-            Log.d(TAG, "Menu tidak memiliki bahan")
-
-            btnOrder.visibility = View.VISIBLE
             tvOutOfStock.visibility = View.GONE
+
+            if (isEditMode) {
+                btnOrder.visibility = View.GONE
+                btnUpdateOrder.visibility = View.VISIBLE
+            } else {
+                btnOrder.visibility = View.VISIBLE
+                btnUpdateOrder.visibility = View.GONE
+            }
 
             return
         }
@@ -475,12 +537,20 @@ class DetailMenuFragment : Fragment() {
 
                     if (stockAvailable) {
 
-                        btnOrder.visibility = View.VISIBLE
                         tvOutOfStock.visibility = View.GONE
+
+                        if (isEditMode) {
+                            btnOrder.visibility = View.GONE
+                            btnUpdateOrder.visibility = View.VISIBLE
+                        } else {
+                            btnOrder.visibility = View.VISIBLE
+                            btnUpdateOrder.visibility = View.GONE
+                        }
 
                     } else {
 
                         btnOrder.visibility = View.GONE
+                        btnUpdateOrder.visibility = View.GONE
                         tvOutOfStock.visibility = View.VISIBLE
                     }
                 }

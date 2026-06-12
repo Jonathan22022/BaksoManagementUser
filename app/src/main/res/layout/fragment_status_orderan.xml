@@ -4,6 +4,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/tools"
     android:background="@drawable/bg_page">
 
     <LinearLayout
@@ -13,17 +14,27 @@
         android:padding="16dp">
 
         <!-- STATUS TITLE -->
-        <TextView
-            android:layout_width="wrap_content"
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Status Orderan"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:textColor="@color/setting_text"
-            android:gravity="center"
-            android:background="@drawable/bg_card_pink"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/setting_card"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Status Orderan"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/primary_title"
+                android:padding="18dp" />
+
+        </androidx.cardview.widget.CardView>
 
         <!-- STATUS CHIP -->
         <TextView
@@ -40,11 +51,29 @@
             android:layout_marginBottom="16dp"/>
 
         <!-- LIST ORDER -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvStatus"
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"/>
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/setting_card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
         <!-- TOTAL CARD -->
         <androidx.cardview.widget.CardView
@@ -83,6 +112,42 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/btnSelesaikanPesanan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Selesaikan Pesanan"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#43A047"
+            android:layout_marginTop="12dp"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btnPesanLagi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lihat Menu"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#FB8C00"
+            android:layout_marginTop="12dp"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btnCancelOrder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Batalkan Pesanan"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#E53935"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="20dp"/>
 
     </LinearLayout>
 

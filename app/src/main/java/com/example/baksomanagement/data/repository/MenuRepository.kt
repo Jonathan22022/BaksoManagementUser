@@ -1,6 +1,7 @@
 package com.example.baksomanagement.data.repository
 
 import android.os.Bundle
+import android.util.Log
 import com.example.baksomanagement.data.model.Menu
 import com.example.baksomanagement.data.remote.FirebaseClient
 import com.google.firebase.firestore.ktx.toObject
@@ -41,11 +42,30 @@ class MenuRepository {
             }
     }
 
-    fun getMenuById(id: String, onResult: (Menu?) -> Unit) {
-        firestore.collection("bakso").document(id)
+    fun getMenuById(
+        id: String,
+        onResult: (Menu?) -> Unit
+    ) {
+
+        if (id.isBlank()) {
+
+            Log.e(
+                "MENU_REPO",
+                "MENU ID KOSONG"
+            )
+
+            onResult(null)
+            return
+        }
+
+        firestore.collection("bakso")
+            .document(id)
             .get()
             .addOnSuccessListener {
-                val menu = it.toObject(Menu::class.java)?.copy(id = it.id)
+                val menu =
+                    it.toObject(Menu::class.java)
+                        ?.copy(id = it.id)
+
                 onResult(menu)
             }
     }

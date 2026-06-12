@@ -57,9 +57,9 @@ package com.example.baksomanagement.data.model
 //}
 
 data class Order(
-    val id: String = "",
-    val userID: String = "", //user mana yang melakukan pemesanan
-    val createdAt: Long = System.currentTimeMillis(),
-    val total: Int = 0, //total harga pesanan
-    val status: String = "pending",
+    val id:String = "",
+    val userID:String = "",
+    val createdAt:Long = System.currentTimeMillis(),
+    val total:Int = 0,
+    val status:String = "pending"
 )

@@ -1,22 +1,31 @@
 package com.example.baksomanagement.data.repository
 
-import android.os.Bundle
 import com.example.baksomanagement.data.model.Order
 import com.example.baksomanagement.data.model.OrderItem
 import com.example.baksomanagement.data.remote.FirebaseClient
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.firestore.QueryDocumentSnapshot
+import android.util.Log
 
 class OrderRepository {
 
     private val firestore = FirebaseClient.firestore
 
-    fun getOrderById(id: String, onResult: (Order?) -> Unit) {
-        firestore.collection("order").document(id)
+    fun getOrderById(
+        id: String,
+        onResult: (Order?) -> Unit
+    ) {
+        firestore.collection("orders")
+            .document(id)
             .get()
             .addOnSuccessListener {
-                val order = it.toObject(Order::class.java)?.copy(id = it.id)
+
+                val order =
+                    it.toObject(Order::class.java)
+                        ?.copy(id = it.id)
+
                 onResult(order)
+            }
+            .addOnFailureListener {
+                onResult(null)
             }
     }
 
@@ -90,15 +99,29 @@ class OrderRepository {
     fun createOrder(
         order: Order,
         items: List<OrderItem>,
-        onSuccess: () -> Unit
+        onSuccess: (String) -> Unit
     ) {
+
+        Log.d("ORDER_DEBUG", "================================")
+        Log.d("ORDER_DEBUG", "createOrder() CALLED")
+        Log.d("ORDER_DEBUG", "userID = ${order.userID}")
+        Log.d("ORDER_DEBUG", "total = ${order.total}")
+        Log.d("ORDER_DEBUG", "items = ${items.size}")
+        Log.d("ORDER_DEBUG", "================================")
+
         val orderRef = firestore.collection("orders").document()
+
+        Log.d(
+            "ORDER_DEBUG",
+            "Generated OrderId = ${orderRef.id}"
+        )
 
         val orderData = hashMapOf(
             "userID" to order.userID,
             "createdAt" to order.createdAt,
             "status" to order.status,
-            "total" to order.total
+            "total" to order.total,
+            "completed" to false
         )
 
         orderRef.set(orderData)
@@ -123,7 +146,8 @@ class OrderRepository {
                 }
 
                 batch.commit().addOnSuccessListener {
-                    onSuccess()
+
+                    onSuccess(orderRef.id)
                 }
             }
     }
@@ -173,8 +197,9 @@ class OrderRepository {
                                 if (!menuIds.contains(menuId)) {
 
                                     if (menuIds.size >= 3) {
-
-                                        menuIds.removeLast()
+                                        if (menuIds.isNotEmpty()) {
+                                            menuIds.removeAt(menuIds.lastIndex)
+                                        }
                                     }
 
                                     menuIds.add(menuId)
@@ -190,4 +215,143 @@ class OrderRepository {
                 }
             }
     }
+
+    fun getActiveOrder(
+        userId: String,
+        onResult: (Order?) -> Unit
+    ) {
+
+        firestore.collection("orders")
+            .whereEqualTo("userID", userId)
+            .whereEqualTo("completed", false)
+            .whereIn(
+                "status",
+                listOf(
+                    "pending",
+                    "diproses",
+                    "siap_diambil",
+                    "selesai"
+                )
+            )
+            .limit(1)
+            .get()
+            .addOnSuccessListener { result ->
+
+                val document =
+                    result.documents.firstOrNull()
+
+                val order =
+                    document?.toObject(Order::class.java)
+                        ?.copy(id = document.id)
+
+                onResult(order)
+            }
+            .addOnFailureListener {
+                onResult(null)
+            }
+    }
+
+    fun completeOrder(
+        orderId: String,
+        onSuccess: () -> Unit
+    ) {
+
+        firestore.collection("orders")
+            .document(orderId)
+            .update(
+                mapOf(
+                    "completed" to true,
+                    "status" to "selesai"
+                )
+            )
+            .addOnSuccessListener {
+
+                onSuccess()
+            }
+    }
+
+    fun getOrderItems(
+        orderId: String,
+        onResult: (List<OrderItem>) -> Unit
+    ) {
+
+        firestore.collection("orders")
+            .document(orderId)
+            .collection("items")
+            .get()
+            .addOnSuccessListener { result ->
+
+                val items =
+                    result.toObjects(OrderItem::class.java)
+
+                items.forEach {
+
+                    Log.d(
+                        "ORDER_ITEM_DEBUG",
+                        """
+                    menu_id = ${it.menu_id}
+                    nama    = ${it.nama}
+                    harga   = ${it.harga}
+                    """.trimIndent()
+                    )
+                }
+
+                onResult(items)
+            }
+    }
+
+    fun observeOrderStatus(
+        orderId: String,
+        onChanged: (String) -> Unit
+    ) {
+
+        firestore.collection("orders")
+            .document(orderId)
+            .addSnapshotListener { snapshot, _ ->
+
+                if (snapshot != null && snapshot.exists()) {
+
+                    val status =
+                        snapshot.getString("status")
+                            ?: "pending"
+
+                    onChanged(status)
+                }
+            }
+    }
+
+    fun updateOrderStatus(
+        orderId: String,
+        status: String,
+        onSuccess: () -> Unit
+    ) {
+
+        firestore.collection("orders")
+            .document(orderId)
+            .update(
+                "status",
+                status
+            )
+            .addOnSuccessListener {
+                onSuccess()
+            }
+    }
+
+    fun cancelOrder(
+        orderId: String,
+        onSuccess: () -> Unit
+    ) {
+
+        firestore.collection("orders")
+            .document(orderId)
+            .update(
+                mapOf(
+                    "status" to "cancel"
+                )
+            )
+            .addOnSuccessListener {
+                onSuccess()
+            }
+    }
+
 }

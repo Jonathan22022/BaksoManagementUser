@@ -7,8 +7,16 @@ object CartManager {
 
     val items = mutableListOf<OrderItem>()
 
-    fun addItem(item: OrderItem) {
+    fun addItem(
+        item: OrderItem
+    ) {
         items.add(item)
+    }
+
+    fun addItems(
+        orderItems: List<OrderItem>
+    ) {
+        items.addAll(orderItems)
     }
 
     fun updateItem(
@@ -31,5 +39,11 @@ object CartManager {
 
     fun clear() {
         items.clear()
+    }
+
+    fun removeItem(position: Int) {
+        if (position >= 0 && position < items.size) {
+            items.removeAt(position)
+        }
     }
 }

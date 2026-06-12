@@ -29,7 +29,7 @@ class CheckoutFragment : Fragment() {
     companion object {
         private const val TAG = "CheckoutDebug"
     }
-
+    private var isCheckoutProcessing = false
     private lateinit var rvCheckout: RecyclerView
     private lateinit var tvGrandTotal: TextView
     private lateinit var btnTambahPesanan: Button
@@ -149,10 +149,35 @@ class CheckoutFragment : Fragment() {
                     )
                 }
 
+                Log.d(
+                    "EDIT_DEBUG",
+                    "selectedItem.menu_id = ${selectedItem.menu_id}"
+                )
+
+                Log.d(
+                    "EDIT_DEBUG",
+                    "position = $position"
+                )
+
                 findNavController().navigate(
                     R.id.action_checkoutFragment_to_detailMenuFragment,
                     bundle
                 )
+            },
+
+            onDeleteClick = { position ->
+
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Hapus Pesanan")
+                    .setMessage("Yakin ingin menghapus item ini?")
+                    .setPositiveButton("Ya") { _, _ ->
+
+                        CartManager.removeItem(position)
+
+                        loadCheckoutItems()
+                    }
+                    .setNegativeButton("Batal", null)
+                    .show()
             }
         )
 
@@ -180,7 +205,15 @@ class CheckoutFragment : Fragment() {
             .setTitle("Konfirmasi Order")
             .setMessage("Apakah orderan sudah sesuai?")
             .setPositiveButton("Ya") { _, _ ->
+                Log.d(
+                    "CHECKOUT_DEBUG",
+                    "CONFIRM BUTTON CLICKED"
+                )
 
+                if (isCheckoutProcessing) return@setPositiveButton
+
+                isCheckoutProcessing = true
+                btnCheckout.isEnabled = false
                 val userId =
                     FirebaseAuth.getInstance()
                         .currentUser?.uid ?: "guest"
@@ -206,14 +239,9 @@ class CheckoutFragment : Fragment() {
                 orderRepository.createOrder(
                     order,
                     cartItems
-                ) {
-
-                    OrderSessionManager.lastOrderItems =
-                        cartItems.map { item ->
-                            item.copy(
-                                addons = item.addons.toList()
-                            )
-                        }
+                ){ orderId ->
+                    isCheckoutProcessing = false
+                    OrderSessionManager.lastOrderId = orderId
 
                     CartManager.clear()
 
@@ -269,6 +297,7 @@ class CheckoutFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume")
+        loadCheckoutItems()
     }
 
     override fun onDestroyView() {

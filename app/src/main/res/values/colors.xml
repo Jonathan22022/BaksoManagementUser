@@ -11,6 +11,7 @@
     <color name="red">#FFD50000</color>
     <color name="nav_red">#D90004</color>
     <color name="nav_grey">#464948</color>
+    <color name="dark_red">#7A2F2F</color>
 
     <!--background light-->
     <color name="bg">#F5F5F5</color>

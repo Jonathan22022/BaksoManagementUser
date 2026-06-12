@@ -11,6 +11,7 @@
     <string name="menu_favourite">Favourite</string>
     <string name="menu_makanan">Menu</string>
     <string name="menu_detail_makanan">Detail Menu</string>
+    <string name="menu_detail_history_orderan">Detail History Orderan</string>
     <string name="menu_history">History</string>
     <string name="menu_setting">Setting</string>
     <string name="menu_logout">Logout</string>
