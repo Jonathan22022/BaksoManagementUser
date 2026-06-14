@@ -21,6 +21,7 @@ class MenuAdapter(
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.imgMenu)
         val name: TextView = itemView.findViewById(R.id.tvMenuName)
+        val desc: TextView = itemView.findViewById(R.id.tvMenuDesc)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -44,6 +45,7 @@ class MenuAdapter(
         Log.d(TAG, "onBindViewHolder → position: $position, menu: ${menu.namaMenu}")
 
         holder.name.text = menu.namaMenu
+        holder.desc.text = menu.description
 
         // Debug URL gambar
         if (menu.gambarUrl.isEmpty()) {

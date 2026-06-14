@@ -162,16 +162,14 @@ class OrderRepository {
             .whereEqualTo("status", "selesai")
             .orderBy(
                 "createdAt",
-                com.google.firebase.firestore.Query.Direction.DESCENDING
+                com.google.firebase.firestore.Query.Direction.ASCENDING
             )
             .get()
             .addOnSuccessListener { result ->
 
-                val menuIds =
-                    mutableListOf<String>()
+                val menuIds = mutableListOf<String>()
 
-                val orderDocs =
-                    result.documents
+                val orderDocs = result.documents
 
                 if (orderDocs.isEmpty()) {
                     onResult(emptyList())
@@ -194,25 +192,33 @@ class OrderRepository {
                                     item.getString("menu_id")
                                         ?: return@forEach
 
-                                if (!menuIds.contains(menuId)) {
+                                // jika sudah ada jangan ditambahkan lagi
+                                if (menuIds.contains(menuId))
+                                    return@forEach
 
-                                    if (menuIds.size >= 3) {
-                                        if (menuIds.isNotEmpty()) {
-                                            menuIds.removeAt(menuIds.lastIndex)
-                                        }
-                                    }
+                                // maksimal 3 menu
+                                if (menuIds.size >= 3) {
 
-                                    menuIds.add(menuId)
+                                    // hapus menu PALING LAMA
+                                    menuIds.removeAt(0)
                                 }
+
+                                menuIds.add(menuId)
                             }
 
                             processed++
 
                             if (processed == orderDocs.size) {
-                                onResult(menuIds)
+
+                                onResult(
+                                    menuIds.reversed()
+                                )
                             }
                         }
                 }
+            }
+            .addOnFailureListener {
+                onResult(emptyList())
             }
     }
 

@@ -19,6 +19,9 @@ import com.example.baksomanagement.R
 import com.example.baksomanagement.ui.login.LoginViewModel
 import com.example.baksomanagement.utils.SavedAccountManager
 import com.example.baksomanagement.utils.SessionManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 
 class LoginFragment : Fragment() {
 
@@ -67,6 +70,50 @@ class LoginFragment : Fragment() {
             Log.d(TAG, "Hasil login diterima: ${result.first}")
 
             if (result.first) {
+
+                FirebaseMessaging.getInstance().token
+                    .addOnSuccessListener { token ->
+
+                        Log.d(
+                            "FCM_DEBUG",
+                            "FCM TOKEN = $token"
+                        )
+
+                        val uid =
+                            FirebaseAuth.getInstance()
+                                .currentUser?.uid
+
+                        Log.d(
+                            "FCM_DEBUG",
+                            "UID = $uid"
+                        )
+
+                        if (uid != null) {
+
+                            FirebaseFirestore.getInstance()
+                                .collection("users")
+                                .document(uid)
+                                .update(
+                                    "fcmToken",
+                                    token
+                                )
+                                .addOnSuccessListener {
+
+                                    Log.d(
+                                        "FCM_DEBUG",
+                                        "Token berhasil disimpan ke Firestore"
+                                    )
+                                }
+                                .addOnFailureListener {
+
+                                    Log.e(
+                                        "FCM_DEBUG",
+                                        "Gagal simpan token",
+                                        it
+                                    )
+                                }
+                        }
+                    }
 
                 Log.i(TAG, "Login berhasil, membuka HomepageActivity")
 

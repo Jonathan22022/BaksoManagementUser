@@ -24,6 +24,8 @@ import com.example.baksomanagement.data.repository.BahanBakuRepository
 import com.example.baksomanagement.data.repository.FavouriteRepository
 import com.example.baksomanagement.data.repository.MenuRepository
 import com.example.baksomanagement.data.repository.OrderRepository
+import com.example.baksomanagement.service.AddOnStokChecker
+import com.example.baksomanagement.service.MenuStokChecker
 import com.example.baksomanagement.ui.cart.CartManager
 import com.google.firebase.auth.FirebaseAuth
 
@@ -239,7 +241,74 @@ class DetailMenuFragment : Fragment() {
                 .load(menu.gambarUrl)
                 .into(imgMenu)
 
-            checkStock(menu.bahanList)
+            bahanRepository.getAllBahan { bahanList ->
+
+                Log.d(TAG, "===== CEK STOK MENU =====")
+                Log.d(TAG, "Menu = ${menu.namaMenu}")
+                Log.d(TAG, "Jumlah bahan menu = ${menu.bahanList.size}")
+                Log.d(TAG, "Jumlah bahan baku = ${bahanList.size}")
+
+                menu.bahanList.forEach {
+                    Log.d(
+                        TAG,
+                        "Menu membutuhkan -> bahanId=${it.bahanId} jumlah=${it.jumlah}"
+                    )
+                }
+
+                bahanList.forEach {
+                    Log.d(
+                        TAG,
+                        "Gudang -> id=${it.id} nama=${it.nama} stok=${it.berat}"
+                    )
+                }
+
+                val kekurangan =
+                    MenuStokChecker.checkMenuStock(
+                        menu,
+                        bahanList
+                    )
+
+                Log.d(
+                    TAG,
+                    "Jumlah kekurangan = ${kekurangan.size}"
+                )
+
+                kekurangan.forEach {
+                    Log.d(
+                        TAG,
+                        "Kurang -> ${it.namaBahan} ${it.kekurangan}"
+                    )
+                }
+
+                val tersedia =
+                    kekurangan.isEmpty()
+
+                if (tersedia) {
+
+                    tvOutOfStock.visibility = View.GONE
+
+                    if (isEditMode) {
+                        btnOrder.visibility = View.GONE
+                        btnUpdateOrder.visibility = View.VISIBLE
+                    } else {
+                        btnOrder.visibility = View.VISIBLE
+                        btnUpdateOrder.visibility = View.GONE
+                    }
+
+                } else {
+
+                    btnOrder.visibility = View.GONE
+                    btnUpdateOrder.visibility = View.GONE
+
+                    tvOutOfStock.visibility = View.VISIBLE
+
+                    tvOutOfStock.text =
+                        buildString {
+
+                            append("⚠️ Menu tidak tersedia\n")
+                        }
+                }
+            }
         }
 
         btnPlus.setOnClickListener {
@@ -315,39 +384,35 @@ class DetailMenuFragment : Fragment() {
                     "Cek stok addon -> ${addon.name}"
                 )
 
-                checkAddonStock(addon) { available ->
+                bahanRepository.getAllBahan { bahanList ->
 
-                    Log.d(
-                        TAG,
-                        "Addon ${addon.name} available = $available"
-                    )
+                    val stockMap =
+                        mutableMapOf<String, Boolean>()
 
-                    addonStockMap[addon.id] = available
+                    addOnList.forEach { addon ->
 
-                    checked++
+                        val kekurangan =
+                            AddOnStokChecker.checkAddOnStock(
+                                addon,
+                                bahanList
+                            )
 
-                    if (checked == addOnList.size) {
-
-                        Log.d(
-                            TAG,
-                            "Semua stok addon selesai dicek"
-                        )
-
-                        val adapter =
-                            AddOnAdapterDetailMenu(
-                                addOnList,
-                                addonStockMap,
-                                selectedAddons
-                            ) { selectedAddon, isChecked ->
-
-                                onAddonSelected(
-                                    selectedAddon,
-                                    isChecked
-                                )
-                            }
-
-                        rvAddons.adapter = adapter
+                        stockMap[addon.id] =
+                            kekurangan.isEmpty()
                     }
+
+                    rvAddons.adapter =
+                        AddOnAdapterDetailMenu(
+                            addOnList,
+                            stockMap,
+                            selectedAddons
+                        ) { selectedAddon, isChecked ->
+
+                            onAddonSelected(
+                                selectedAddon,
+                                isChecked
+                            )
+                        }
                 }
             }
         }

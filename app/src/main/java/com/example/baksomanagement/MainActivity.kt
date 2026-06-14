@@ -9,6 +9,8 @@ import com.example.baksomanagement.utils.NotificationHelper
 import com.example.baksomanagement.utils.SessionManager
 import com.example.baksomanagement.utils.ThemeManager
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,6 +33,7 @@ class MainActivity : AppCompatActivity() {
             finish()
             return
         }
+
         setContentView(R.layout.activity_main)
     }
 }

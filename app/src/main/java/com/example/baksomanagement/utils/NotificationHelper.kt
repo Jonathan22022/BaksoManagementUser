@@ -58,4 +58,37 @@ object NotificationHelper {
             .from(context)
             .notify(1001, notification)
     }
+
+    @RequiresPermission(
+        Manifest.permission.POST_NOTIFICATIONS
+    )
+    fun showStatusNotification(
+        context: Context,
+        title: String,
+        body: String
+    ) {
+
+        val notification =
+            NotificationCompat.Builder(
+                context,
+                CHANNEL_ID
+            )
+                .setSmallIcon(
+                    R.mipmap.baksoku_foreground
+                )
+                .setContentTitle(title)
+                .setContentText(body)
+                .setPriority(
+                    NotificationCompat.PRIORITY_HIGH
+                )
+                .setAutoCancel(true)
+                .build()
+
+        NotificationManagerCompat
+            .from(context)
+            .notify(
+                System.currentTimeMillis().toInt(),
+                notification
+            )
+    }
 }
