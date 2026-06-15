@@ -76,7 +76,7 @@ class HistoryFragment :
         }
 
         btnCancelled.setOnClickListener {
-            currentStatus = "dibatalkan"
+            currentStatus = "cancel"
             switchTab(false)
             loadHistory()
         }
@@ -175,7 +175,8 @@ class HistoryFragment :
 
         adapter =
             HistoryAdapter(
-                filtered.toMutableList()
+                filtered.toMutableList(),
+                currentStatus
             ){
                 updateFabVisibility()
             }

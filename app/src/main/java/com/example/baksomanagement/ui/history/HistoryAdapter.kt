@@ -19,6 +19,7 @@ import java.util.Locale
 
 class HistoryAdapter(
     private val list: MutableList<History>,
+    private val currentStatus: String,
     private val onSelectionChanged: () -> Unit
 ) : RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
 
@@ -107,11 +108,22 @@ class HistoryAdapter(
         holder.tvTotal.text =
             "Rp ${item.total}"
 
-        holder.tvStatus.text =
-            if(item.status == "selesai")
-                "Completed"
-            else
-                "Cancelled"
+        if(item.status == "selesai"){
+
+            holder.tvStatus.text = "Completed"
+
+            holder.tvStatus.setTextColor(
+                android.graphics.Color.parseColor("#2E7D32")
+            )
+
+        }else{
+
+            holder.tvStatus.text = "Cancelled"
+
+            holder.tvStatus.setTextColor(
+                android.graphics.Color.parseColor("#D32F2F")
+            )
+        }
 
         holder.tvDate.text =
             SimpleDateFormat(
@@ -124,6 +136,8 @@ class HistoryAdapter(
         Glide.with(holder.itemView)
             .load(item.imageUrl)
             .into(holder.imgMenu)
+
+        holder.cbSelect.visibility = View.VISIBLE
 
         holder.cbSelect.setOnCheckedChangeListener(null)
 
