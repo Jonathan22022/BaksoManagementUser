@@ -28,16 +28,19 @@
 
         <!-- Search Box -->
         <androidx.cardview.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="3dp">
+            card_view:cardCornerRadius="16dp"
+            card_view:cardElevation="3dp"
+            card_view:cardBackgroundColor="@color/setting_card">
 
             <EditText
                 android:id="@+id/etSearch"
                 android:textColor="@color/setting_text"
+                android:textColorHint="@color/setting_text"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:paddingHorizontal="16dp"
@@ -48,10 +51,12 @@
 
         <!-- RecyclerView -->
         <androidx.cardview.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="3dp">
+            card_view:cardCornerRadius="16dp"
+            card_view:cardElevation="3dp"
+            card_view:cardBackgroundColor="@color/setting_card">
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewSearchResults"
                 android:layout_width="match_parent"
