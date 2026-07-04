@@ -37,7 +37,7 @@ package com.example.baksomanagement.data.model
 
 //orders: {
 //    orderId1: {
-//        userID: "nigger",
+//        userID: "A",
 //        created_at: "...",
 //        status: "pending",
 //        items: {
@@ -61,5 +61,13 @@ data class Order(
     val userID:String = "",
     val createdAt:Long = System.currentTimeMillis(),
     val total:Int = 0,
-    val status:String = "pending"
+    val status:String = "waiting_payment",
+    val paymentStatus:String = "waiting",
+    val qrUrl:String = "",
+    val completed:Boolean = false,
+    val transactionId:String = "",
+    val pickupType:String="dine_in",
+    val deliveryAddress:String="",
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0
 )

@@ -1,5 +1,6 @@
 package com.example.baksomanagement.ui.search
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,9 +39,8 @@ class SearchAdapter(
         holder: MenuViewHolder,
         position: Int
     ) {
-
         val menu = menuList[position]
-
+        Log.d("ADAPTER", menu.namaMenu)
         holder.tvMenuName.text = menu.namaMenu
         holder.tvMenuDesc.text = menu.description
 

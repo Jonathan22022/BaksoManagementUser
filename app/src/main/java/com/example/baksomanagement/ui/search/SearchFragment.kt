@@ -3,6 +3,7 @@ package com.example.baksomanagement.ui.search
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.baksomanagement.R
 import com.example.baksomanagement.data.model.Menu
 import com.example.baksomanagement.data.repository.MenuRepository
+import android.view.inputmethod.EditorInfo
 
 class SearchFragment : Fragment() {
 
@@ -50,11 +52,25 @@ class SearchFragment : Fragment() {
 
             allMenu = menus
 
+            Log.d("SEARCH", "Jumlah menu = ${menus.size}")
+            menus.forEach {
+                Log.d("SEARCH", it.namaMenu)
+            }
+
             adapter.updateData(menus)
 
             layoutEmpty.visibility =
                 if (menus.isEmpty()) View.VISIBLE
                 else View.GONE
+        }
+
+        etSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                etSearch.clearFocus()
+                true
+            } else {
+                false
+            }
         }
 
         etSearch.addTextChangedListener(object : TextWatcher {
@@ -81,6 +97,9 @@ class SearchFragment : Fragment() {
                         ignoreCase = true
                     )
                 }
+
+                Log.d("SEARCH", "Keyword = $keyword")
+                Log.d("SEARCH", "Hasil = ${filtered.size}")
 
                 adapter.updateData(filtered)
 

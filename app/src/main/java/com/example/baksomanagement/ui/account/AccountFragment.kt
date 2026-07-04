@@ -18,7 +18,7 @@ class AccountFragment : Fragment() {
 
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseClient.firestore
-
+    private lateinit var tvAlamat: TextView
     private val TAG = "AccountFragment"
 
     private lateinit var imgProfile: ImageView
@@ -40,7 +40,7 @@ class AccountFragment : Fragment() {
         tvEmail = view.findViewById(R.id.tvEmail)
         tvPhone = view.findViewById(R.id.tvPhone)
         tvAccountAge = view.findViewById(R.id.tvAccountAge)
-
+        tvAlamat = view.findViewById(R.id.tvAlamat)
         Log.d(TAG, "onCreateView dipanggil")
 
         loadUserData()
@@ -92,6 +92,8 @@ class AccountFragment : Fragment() {
                     tvNama.text = nama
                     tvEmail.text = email
                     tvPhone.text = phone
+                    val alamat = document.getString("alamat")
+                    tvAlamat.text = if (alamat.isNullOrEmpty()) "Belum diatur" else alamat
 
                     // load foto profil
                     if (!imageUrl.isNullOrEmpty()) {

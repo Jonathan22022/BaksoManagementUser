@@ -39,30 +39,36 @@
 
             <EditText
                 android:id="@+id/etSearch"
-                android:textColor="@color/setting_text"
-                android:textColorHint="@color/setting_text"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:paddingHorizontal="16dp"
+                android:background="@android:color/transparent"
                 android:hint="Cari menu bakso..."
-                android:background="@android:color/transparent"/>
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/setting_text"
+                android:textColorHint="@color/text_secondary"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:imeOptions="actionSearch"
+                android:inputType="text"/>
 
         </androidx.cardview.widget.CardView>
 
         <!-- RecyclerView -->
         <androidx.cardview.widget.CardView
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            card_view:cardCornerRadius="16dp"
-            card_view:cardElevation="3dp"
-            card_view:cardBackgroundColor="@color/setting_card">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="18dp"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/setting_card">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewSearchResults"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_marginTop="16dp"/>
+                android:layout_height="match_parent"/>
+
         </androidx.cardview.widget.CardView>
 
         <!-- Empty State -->

@@ -50,6 +50,16 @@
             android:background="@drawable/bg_status_chip"
             android:layout_marginBottom="16dp"/>
 
+        <TextView
+            android:id="@+id/tvJarakWaktu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Estimasi Jarak : -"
+            android:textColor="@color/text_3"
+            android:textSize="13sp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"/>
+
         <!-- LIST ORDER -->
 
         <androidx.cardview.widget.CardView

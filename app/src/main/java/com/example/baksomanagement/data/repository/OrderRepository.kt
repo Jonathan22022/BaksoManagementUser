@@ -4,7 +4,13 @@ import com.example.baksomanagement.data.model.Order
 import com.example.baksomanagement.data.model.OrderItem
 import com.example.baksomanagement.data.remote.FirebaseClient
 import android.util.Log
-
+import com.example.baksomanagement.data.model.PaymentRequest
+import com.example.baksomanagement.data.model.PaymentResponse
+import com.example.baksomanagement.data.model.SnapResponse
+import com.example.baksomanagement.data.remote.api.ApiClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 class OrderRepository {
 
     private val firestore = FirebaseClient.firestore
@@ -121,7 +127,11 @@ class OrderRepository {
             "createdAt" to order.createdAt,
             "status" to order.status,
             "total" to order.total,
-            "completed" to false
+            "completed" to false,
+            "pickupType" to order.pickupType,
+            "deliveryAddress" to order.deliveryAddress,
+            "latitude" to order.latitude,
+            "longitude" to order.longitude
         )
 
         orderRef.set(orderData)
@@ -235,6 +245,8 @@ class OrderRepository {
                 listOf(
                     "pending",
                     "diproses",
+                    "dalam_perjalanan",
+                    "sampai_tujuan",
                     "siap_diambil",
                     "selesai"
                 )
@@ -360,4 +372,146 @@ class OrderRepository {
             }
     }
 
+    fun createSnapPayment(
+
+        orderId: String,
+
+        total: Int,
+
+        onSuccess: (String) -> Unit,
+
+        onFailed: (String) -> Unit
+
+    ) {
+        Log.d("SnapDebug", "===================================")
+        Log.d("SnapDebug", "POST /api/snap/create")
+        Log.d("SnapDebug", "OrderId = $orderId")
+        Log.d("SnapDebug", "Total = $total")
+        Log.d("SnapDebug", "===================================")
+
+        val request = PaymentRequest(
+            orderId,
+            total
+        )
+
+        ApiClient.api
+            .createSnap(request)
+            .enqueue(
+
+                object : Callback<SnapResponse> {
+
+                    override fun onResponse(
+
+                        call: Call<SnapResponse>,
+
+                        response: Response<SnapResponse>
+
+                    ) {
+                        Log.d("SnapDebug", "HTTP = ${response.code()}")
+                        Log.d("SnapDebug", "Body = ${response.body()}")
+                        Log.d("SnapDebug", "Error = ${response.errorBody()?.string()}")
+                        if (response.isSuccessful) {
+
+                            val body = response.body()
+
+                            if (body != null) {
+
+                                onSuccess(
+                                    body.data.token
+                                )
+
+                            } else {
+
+                                onFailed("Body kosong")
+
+                            }
+
+                        } else {
+
+                            onFailed(response.message())
+
+                        }
+
+                    }
+
+                    override fun onFailure(
+
+                        call: Call<SnapResponse>,
+
+                        t: Throwable
+
+                    ) {
+                        Log.e("SnapDebug", "NETWORK ERROR")
+                        Log.e("SnapDebug", t.localizedMessage ?: "")
+                        t.printStackTrace()
+                        onFailed(
+                            t.message ?: "Unknown"
+                        )
+
+                    }
+
+                }
+
+            )
+
+    }
+    /*fun createQrisPayment(
+        orderId: String,
+        total: Int,
+        onSuccess: (String, String) -> Unit,
+        onFailed: (String) -> Unit
+    ) {
+
+        val request = PaymentRequest(
+            orderId,
+            total
+        )
+
+        ApiClient.api
+            .createQris(request)
+            .enqueue(object : Callback<PaymentResponse> {
+
+                override fun onResponse(
+                    call: Call<PaymentResponse>,
+                    response: Response<PaymentResponse>
+                ) {
+
+                    if (response.isSuccessful) {
+
+                        val body = response.body()
+
+                        if (body != null) {
+
+                            onSuccess(
+                                body.data.bank,
+                                body.data.vaNumber
+                            )
+
+                        } else {
+
+                            onFailed("Body null")
+                        }
+
+                    } else {
+
+                        onFailed(response.message())
+                    }
+
+                }
+
+                override fun onFailure(
+                    call: Call<PaymentResponse>,
+                    t: Throwable
+                ) {
+
+                    onFailed(
+                        t.message ?: "Unknown Error"
+                    )
+
+                }
+
+            })
+
+    }
+    */
 }

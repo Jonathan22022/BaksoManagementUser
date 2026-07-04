@@ -4,13 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.baksomanagement.data.remote.CloudinaryClient
-import com.example.baksomanagement.ui.firstPage.FirstPageFragment
 import com.example.baksomanagement.utils.NotificationHelper
-import com.example.baksomanagement.utils.SessionManager
 import com.example.baksomanagement.utils.ThemeManager
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.messaging.FirebaseMessaging
+import com.midtrans.sdk.uikit.external.UiKitApi
 
 class MainActivity : AppCompatActivity() {
 
