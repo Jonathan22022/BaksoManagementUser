@@ -105,7 +105,7 @@ class OrderRepository {
     fun createOrder(
         order: Order,
         items: List<OrderItem>,
-        onSuccess: (String) -> Unit
+        onSuccess: (String, String) -> Unit
     ) {
 
         Log.d("ORDER_DEBUG", "================================")
@@ -117,10 +117,15 @@ class OrderRepository {
 
         val orderRef = firestore.collection("orders").document()
 
+
         Log.d(
             "ORDER_DEBUG",
             "Generated OrderId = ${orderRef.id}"
         )
+
+        val dummyTransactionId = "DUMMY-${orderRef.id}"
+
+        val dummyQrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=$dummyTransactionId"
 
         val orderData = hashMapOf(
             "userID" to order.userID,
@@ -131,7 +136,10 @@ class OrderRepository {
             "pickupType" to order.pickupType,
             "deliveryAddress" to order.deliveryAddress,
             "latitude" to order.latitude,
-            "longitude" to order.longitude
+            "longitude" to order.longitude,
+            "paymentStatus" to "waiting",
+            "qrUrl" to dummyQrUrl,
+            "transactionId" to dummyTransactionId
         )
 
         orderRef.set(orderData)
@@ -157,8 +165,36 @@ class OrderRepository {
 
                 batch.commit().addOnSuccessListener {
 
-                    onSuccess(orderRef.id)
+                    onSuccess(orderRef.id, dummyQrUrl)
                 }
+            }
+    }
+
+    fun confirmDummyPayment(
+        orderId: String,
+        onSuccess: () -> Unit,
+        onFailed: (String) -> Unit
+    ) {
+
+        Log.d("DummyPayment", "Konfirmasi pembayaran dummy untuk orderId=$orderId")
+
+        firestore.collection("orders")
+            .document(orderId)
+            .update(
+                mapOf(
+                    "paymentStatus" to "success",
+                    "status" to "diproses"
+                )
+            )
+            .addOnSuccessListener {
+
+                Log.d("DummyPayment", "Update paymentStatus=success & status=diproses BERHASIL")
+                onSuccess()
+            }
+            .addOnFailureListener { e ->
+
+                Log.e("DummyPayment", "GAGAL update pembayaran dummy: ${e.message}")
+                onFailed(e.message ?: "Gagal update status pembayaran")
             }
     }
 

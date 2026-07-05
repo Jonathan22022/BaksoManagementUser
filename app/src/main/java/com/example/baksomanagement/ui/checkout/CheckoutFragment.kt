@@ -589,18 +589,21 @@ class CheckoutFragment : Fragment() {
                 orderRepository.createOrder(
                     order,
                     cartItems
-                ) { orderId ->
-
+                ) { orderId, qrUrl ->
 
                     Log.d(TAG, "===========================================")
                     Log.d(TAG, "ORDER BERHASIL DIBUAT")
                     Log.d(TAG, "Order ID = $orderId")
+                    Log.d(TAG, "QR URL = $qrUrl")
                     Log.d(TAG, "Total = $total")
                     Log.d(TAG, "User = $userId")
                     Log.d(TAG, "Pickup = $pickupType")
-                    Log.d(TAG, "Alamat = $alamat")
+                    Log.d(TAG, "Alamat = ${etAlamat.text}")
                     Log.d(TAG, "===========================================")
 
+                    requireActivity().runOnUiThread {
+                        showDummyQrisDialog(orderId, qrUrl, total)
+                    }
                     /*
                     Log.d(TAG, "Meminta Snap Token ke Backend...")
 
@@ -758,6 +761,102 @@ class CheckoutFragment : Fragment() {
             }
             .setNegativeButton("Cek Lagi", null)
             .show()
+    }
+
+    private fun showDummyQrisDialog(
+        orderId: String,
+        qrUrl: String,
+        total: Int
+    ) {
+
+        val dialogView =
+            layoutInflater.inflate(
+                R.layout.dialog_dummy_qris,
+                null
+            )
+
+        val imgQr =
+            dialogView.findViewById<ImageView>(R.id.imgQrDummy)
+
+        val tvTotalBayar =
+            dialogView.findViewById<TextView>(R.id.tvTotalBayar)
+
+        val btnKonfirmasiBayar =
+            dialogView.findViewById<Button>(R.id.btnKonfirmasiBayar)
+
+        tvTotalBayar.text = "Rp $total"
+
+        Glide.with(this)
+            .load(qrUrl)
+            .into(imgQr)
+
+        val dialog =
+            AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .setCancelable(false)
+                .create()
+
+        btnKonfirmasiBayar.setOnClickListener {
+
+            Log.d(TAG, "Tombol Simulasi Bayar diklik untuk orderId=$orderId")
+
+            btnKonfirmasiBayar.isEnabled = false
+            btnKonfirmasiBayar.text = "Memproses..."
+
+            orderRepository.confirmDummyPayment(
+                orderId,
+                onSuccess = {
+
+                    Log.d(TAG, "confirmDummyPayment SUKSES")
+
+                    Toast.makeText(
+                        requireContext(),
+                        "Pembayaran berhasil (simulasi)",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    OrderSessionManager.lastOrderId = orderId
+
+                    CartManager.clear()
+
+                    if (
+                        ContextCompat.checkSelfPermission(
+                            requireContext(),
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        NotificationHelper.showOrderNotification(requireContext())
+                    }
+
+                    dialog.dismiss()
+
+                    isCheckoutProcessing = false
+                    btnCheckout.isEnabled = true
+
+                    findNavController().navigate(
+                        R.id.action_checkoutFragment_to_homepageFragment
+                    )
+                },
+                onFailed = { error ->
+
+                    Log.e(TAG, "confirmDummyPayment GAGAL: $error")
+
+                    Toast.makeText(
+                        requireContext(),
+                        "Gagal konfirmasi pembayaran: $error",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    btnKonfirmasiBayar.isEnabled = true
+                    btnKonfirmasiBayar.text = "Simulasi Bayar Berhasil"
+
+                    isCheckoutProcessing = false
+                    btnCheckout.isEnabled = true
+                }
+            )
+        }
+
+        dialog.show()
     }
 
     private fun requestNotificationPermission() {
